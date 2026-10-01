@@ -1,0 +1,510 @@
+---
+import { Picture } from 'astro:assets';
+import Icon, { type IconName } from './Icon.astro';
+import frente from '../assets/fotos/cabana-frente.jpg';
+import galeriaParrilla from '../assets/fotos/galeria-parrilla.jpg';
+import galeriaSillones from '../assets/fotos/galeria-sillones.jpg';
+import galeriaVista from '../assets/fotos/galeria-vista.jpg';
+import galeriaNoche from '../assets/fotos/galeria-noche.jpg';
+import cocinaMesa from '../assets/fotos/cocina-mesa.jpg';
+import cocinaAbierta from '../assets/fotos/cocina-abierta.jpg';
+import cocinaMesada from '../assets/fotos/cocina-mesada.jpg';
+import dormPpal from '../assets/fotos/dormitorio-ppal.jpg';
+import dormPpal2 from '../assets/fotos/dormitorio-ppal-3.jpg';
+import dormDos from '../assets/fotos/dormitorio-dos.jpg';
+import dormDos2 from '../assets/fotos/dormitorio-dos-2.jpg';
+import bano from '../assets/fotos/bano.jpg';
+import bano2 from '../assets/fotos/bano-2.jpg';
+import cochera from '../assets/fotos/cabana-cochera.jpg';
+
+type Ambiente = {
+  id: string;
+  nombre: string;
+  texto: string;
+  fotos: { src: ImageMetadata; alt: string }[];
+};
+const ambientes: Ambiente[] = [
+  {
+    id: 'galeria',
+    nombre: 'Galería y parrilla',
+    texto: 'Parrilla propia, mesa larga y sillones, mirando al parque. Con cortinas para cerrarla cuando refresca.',
+    fotos: [
+      { src: galeriaSillones, alt: 'Galería con sillones y ventanales abiertos a la cocina' },
+      { src: galeriaParrilla, alt: 'Parrilla de material y mesa larga en la galería' },
+      { src: galeriaNoche, alt: 'Galería iluminada de noche, con un brasero encendido en el pasto' },
+      { src: galeriaVista, alt: 'Mesa de la galería con vista al parque y los árboles' },
+    ],
+  },
+  {
+    id: 'cocina',
+    nombre: 'Cocina-comedor',
+    texto: 'Equipada completa: heladera, horno, microondas y vajilla. Mesa redonda y ventanales que se abren a la galería.',
+    fotos: [
+      { src: cocinaMesa, alt: 'Cocina-comedor con mesa redonda y piso de madera' },
+      { src: cocinaAbierta, alt: 'Ventanal abierto de la cocina hacia la galería y el parque' },
+      { src: cocinaMesada, alt: 'Mesada con bacha, horno, microondas y heladera' },
+    ],
+  },
+  {
+    id: 'dormitorio',
+    nombre: 'Dormitorio principal',
+    texto: 'Cama matrimonial, placard, mesas de luz y aire acondicionado.',
+    fotos: [
+      { src: dormPpal, alt: 'Dormitorio con cama matrimonial y placard' },
+      { src: dormPpal2, alt: 'Cama matrimonial con mesas de luz y aire acondicionado' },
+    ],
+  },
+  {
+    id: 'segundo',
+    nombre: 'Segundo dormitorio',
+    texto: 'Dos camas individuales, ventana al monte y aire acondicionado.',
+    fotos: [
+      { src: dormDos, alt: 'Dormitorio con dos camas individuales' },
+      { src: dormDos2, alt: 'Dos camas individuales junto a la ventana con vista al monte' },
+    ],
+  },
+  {
+    id: 'bano',
+    nombre: 'Baño',
+    texto: 'Ducha con mampara, bacha de apoyo y espejo redondo.',
+    fotos: [
+      { src: bano, alt: 'Baño con ducha de mampara y bacha de apoyo' },
+      { src: bano2, alt: 'Bacha con espejo redondo de madera' },
+    ],
+  },
+  {
+    id: 'cochera',
+    nombre: 'Cochera',
+    texto: 'Techada, al lado de la galería: el auto queda a la sombra y a pasos.',
+    fotos: [{ src: cochera, alt: 'Cabaña con galería y cochera techada' }],
+  },
+];
+
+const datos: { icon: IconName; texto: string }[] = [
+  { icon: 'users', texto: 'Para 4 personas (5 con sofá cama)' },
+  { icon: 'bedDouble', texto: '2 dormitorios' },
+  { icon: 'snowflake', texto: 'Aire acondicionado en los 3 ambientes' },
+  { icon: 'flame', texto: 'Calefacción' },
+  { icon: 'wifi', texto: 'WiFi' },
+  { icon: 'tv', texto: 'TV con cable' },
+  { icon: 'beef', texto: 'Parrilla propia' },
+  { icon: 'car', texto: 'Cochera' },
+];
+---
+<section class="cabana" id="cabana" aria-labelledby="t-cabana" data-zoom="2">
+  <div class="cabana__intro">
+    <div class="cabana__frente" data-r="foto">
+      <Picture src={frente} formats={['avif', 'webp']} widths={[800, 1400, 2000]} sizes="(min-width: 1000px) 55vw, 100vw" alt="Cabaña de líneas modernas con galería, cortinas y parque alrededor" loading="lazy" />
+    </div>
+    <div class="cabana__texto">
+      <h2 id="t-cabana" data-r="sube">Tu cabaña, de punta a punta</h2>
+      <p class="lead" data-r="sube" style="--d:80ms">
+        Todas las cabañas son iguales, así que lo que ves es lo que vas a encontrar: dos dormitorios, cocina-comedor completa y una galería con parrilla propia mirando al verde.
+      </p>
+      <ul class="datos" data-r="grupo">
+        {datos.map((d) => <li><Icon name={d.icon} size={20} /> {d.texto}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="recorrido wrap">
+    <div class="recorrido__plano" data-r="sube">
+      <h3>Recorrela por dentro</h3>
+      <svg class="plano" viewBox="0 0 400 260" role="group" aria-label="Esquema de la cabaña: elegí un ambiente">
+        <defs>
+          <pattern id="rayado" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" stroke-width="1" opacity="0.25" />
+          </pattern>
+        </defs>
+        <g class="plano__amb" data-amb="cochera">
+          <rect x="300" y="20" width="90" height="150" fill="url(#rayado)" />
+          <text x="345" y="99">Cochera</text>
+        </g>
+        <g class="plano__amb" data-amb="galeria">
+          <rect x="10" y="170" width="380" height="80" fill="url(#rayado)" />
+          <text x="200" y="214">Galería y parrilla</text>
+        </g>
+        <g class="plano__amb" data-amb="cocina">
+          <rect x="120" y="20" width="180" height="150" />
+          <text x="210" y="99">Cocina-comedor</text>
+        </g>
+        <g class="plano__amb" data-amb="dormitorio">
+          <rect x="10" y="20" width="110" height="72" />
+          <text x="65" y="60">Dormitorio</text>
+        </g>
+        <g class="plano__amb" data-amb="bano">
+          <rect x="10" y="92" width="110" height="36" />
+          <text x="65" y="114">Baño</text>
+        </g>
+        <g class="plano__amb" data-amb="segundo">
+          <rect x="10" y="128" width="110" height="42" />
+          <text x="65" y="153">Dormitorio 2</text>
+        </g>
+      </svg>
+      <p class="plano__nota">Esquema ilustrativo, no es el plano real.</p>
+
+      <div class="ambientes" role="tablist" aria-label="Ambientes de la cabaña">
+        {ambientes.map((a, i) => (
+          <button type="button" role="tab" id={`tab-${a.id}`} aria-controls={`panel-${a.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-amb={a.id}>
+            {a.nombre}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="recorrido__fotos" data-r="sube" style="--d:100ms">
+      {ambientes.map((a, i) => (
+        <div class="panel" role="tabpanel" id={`panel-${a.id}`} aria-labelledby={`tab-${a.id}`} hidden={i !== 0} data-panel={a.id}>
+          <div class="panel__tira">
+            {a.fotos.map((f, j) => (
+              <figure class="panel__foto">
+                <Picture src={f.src} formats={['avif', 'webp']} widths={[700, 1100, 1600]} sizes="(min-width: 1000px) 58vw, 92vw" alt={f.alt} loading={i === 0 && j === 0 ? 'eager' : 'lazy'} />
+              </figure>
+            ))}
+          </div>
+          <div class="panel__pie">
+            <p><strong>{a.nombre}.</strong> {a.texto}</p>
+            {a.fotos.length > 1 && (
+              <div class="panel__flechas">
+                <button type="button" class="flecha" data-dir="-1" aria-label="Foto anterior"><Icon name="chevronLeft" /></button>
+                <span class="panel__cuenta" aria-hidden="true"><span>1</span> / {a.fotos.length}</span>
+                <button type="button" class="flecha" data-dir="1" aria-label="Foto siguiente"><Icon name="chevronRight" /></button>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cabana {
+    background: var(--verde-hondo);
+    color: var(--blanco);
+    padding-bottom: clamp(4rem, 9vw, 8rem);
+  }
+
+  .cabana__intro {
+    display: grid;
+  }
+
+  @media (min-width: 1000px) {
+    .cabana__intro {
+      grid-template-columns: 1.15fr 1fr;
+      min-height: 88vh;
+    }
+  }
+
+  .cabana__frente {
+    min-height: 56vw;
+  }
+
+  @media (min-width: 1000px) {
+    .cabana__frente {
+      min-height: 0;
+    }
+  }
+
+  .cabana__frente :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cabana__texto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.6rem;
+    padding: clamp(3rem, 6vw, 5rem) var(--gutter);
+  }
+
+  .cabana__texto .lead {
+    color: rgb(255 255 255 / 0.86);
+  }
+
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: 0;
+    margin: 0.6rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  .datos li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgb(255 255 255 / 0.18);
+    font-size: 1rem;
+  }
+
+  .datos :global(.icon) {
+    color: var(--naranja);
+    flex: none;
+  }
+
+  .recorrido {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: clamp(4rem, 8vw, 7rem);
+  }
+
+  @media (min-width: 1000px) {
+    .recorrido {
+      grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
+      gap: 4rem;
+      align-items: start;
+    }
+    .recorrido__plano {
+      position: sticky;
+      top: 6rem;
+    }
+  }
+
+  .recorrido__plano h3 {
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+  }
+
+  .plano {
+    width: 100%;
+    margin-top: 1.6rem;
+    color: var(--blanco);
+    overflow: visible;
+  }
+
+  .plano__amb {
+    cursor: pointer;
+  }
+
+  .plano__amb rect {
+    fill-opacity: 1;
+    stroke: rgb(255 255 255 / 0.75);
+    stroke-width: 2;
+    transition:
+      fill 0.3s,
+      stroke 0.3s;
+  }
+
+  .plano__amb rect:not([fill]) {
+    fill: transparent;
+  }
+
+  .plano__amb text {
+    fill: rgb(255 255 255 / 0.85);
+    font: 600 14px var(--f-texto);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    .plano__amb:hover rect {
+      stroke: var(--naranja);
+    }
+  }
+
+  .plano__amb.activo rect {
+    fill: var(--naranja);
+    stroke: var(--naranja);
+  }
+
+  .plano__amb.activo text {
+    fill: var(--verde-noche);
+  }
+
+  .plano__nota {
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
+    color: rgb(255 255 255 / 0.65);
+  }
+
+  .ambientes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.6rem;
+  }
+
+  .ambientes button {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.08);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+    color: var(--blanco);
+    font: 600 0.9375rem var(--f-texto);
+    cursor: pointer;
+    transition:
+      background-color 0.25s,
+      color 0.25s;
+  }
+
+  @media (hover: hover) {
+    .ambientes button:hover {
+      background: rgb(255 255 255 / 0.16);
+    }
+  }
+
+  .ambientes button[aria-selected='true'] {
+    background: var(--naranja);
+    color: var(--verde-noche);
+    box-shadow: none;
+  }
+
+  .panel {
+    animation: panel 0.4s var(--ease-out);
+  }
+
+  @keyframes panel {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+  }
+
+  .panel__tira {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    border-radius: 14px;
+  }
+
+  .panel__tira::-webkit-scrollbar {
+    display: none;
+  }
+
+  .panel__foto {
+    flex: 0 0 100%;
+    margin: 0;
+    scroll-snap-align: start;
+    aspect-ratio: 3 / 2;
+    background: var(--verde-noche);
+  }
+
+  .panel__foto :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .panel__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 1.2rem;
+  }
+
+  .panel__pie p {
+    max-width: 46ch;
+    color: rgb(255 255 255 / 0.88);
+  }
+
+  .panel__pie strong {
+    color: var(--blanco);
+    font-weight: 700;
+  }
+
+  .panel__flechas {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .panel__cuenta {
+    min-width: 3.2rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .flecha {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.1);
+    color: var(--blanco);
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      transform 0.2s;
+  }
+
+  @media (hover: hover) {
+    .flecha:hover {
+      background: rgb(255 255 255 / 0.2);
+    }
+  }
+
+  .flecha:active {
+    transform: scale(0.94);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>('.cabana')!;
+  const tabs = [...raiz.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  const ambs = [...raiz.querySelectorAll<SVGGElement>('.plano__amb')];
+
+  const elegir = (id: string, foco = false) => {
+    tabs.forEach((t) => {
+      const si = t.dataset.amb === id;
+      t.setAttribute('aria-selected', String(si));
+      t.tabIndex = si ? 0 : -1;
+      if (si && foco) t.focus();
+    });
+    raiz.querySelectorAll<HTMLElement>('[role="tabpanel"]').forEach((p) => (p.hidden = p.dataset.panel !== id));
+    ambs.forEach((g) => g.classList.toggle('activo', g.dataset.amb === id));
+  };
+
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => elegir(t.dataset.amb!));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      elegir(tabs[(i + d + tabs.length) % tabs.length].dataset.amb!, true);
+    });
+  });
+  ambs.forEach((g) => g.addEventListener('click', () => elegir(g.dataset.amb!)));
+
+  // Flechas y contador de cada tira de fotos
+  raiz.querySelectorAll<HTMLElement>('.panel').forEach((panel) => {
+    const tira = panel.querySelector<HTMLElement>('.panel__tira')!;
+    const cuenta = panel.querySelector('.panel__cuenta span');
+    panel.querySelectorAll<HTMLButtonElement>('.flecha').forEach((b) =>
+      b.addEventListener('click', () => {
+        const n = tira.children.length;
+        const i = Math.round(tira.scrollLeft / tira.clientWidth);
+        const j = (i + Number(b.dataset.dir) + n) % n;
+        tira.scrollTo({ left: j * tira.clientWidth, behavior: 'smooth' });
+      }),
+    );
+    tira.addEventListener(
+      'scroll',
+      () => {
+        if (cuenta) cuenta.textContent = String(Math.round(tira.scrollLeft / tira.clientWidth) + 1);
+      },
+      { passive: true },
+    );
+  });
+
+  elegir('galeria');
+</script>

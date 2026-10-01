@@ -1,0 +1,27 @@
+---
+// Todo el sitio menos el inicio, que llega por el slot.
+import Cabecera from './Cabecera.astro';
+import Predio from './Predio.astro';
+import Pausa from './Pausa.astro';
+import Cabana from './Cabana.astro';
+import Arroyo from './Arroyo.astro';
+import Mascotas from './Mascotas.astro';
+import TodoElAno from './TodoElAno.astro';
+import ComoLlegar from './ComoLlegar.astro';
+import Consulta from './Consulta.astro';
+import Pie from './Pie.astro';
+
+---
+<Cabecera />
+<main id="contenido">
+  <slot />
+  <Predio />
+  <Pausa />
+  <Cabana />
+  <Arroyo />
+  <Mascotas />
+  <TodoElAno />
+  <ComoLlegar />
+  <Consulta />
+</main>
+<Pie />

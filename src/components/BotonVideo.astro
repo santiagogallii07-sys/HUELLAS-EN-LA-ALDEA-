@@ -1,0 +1,57 @@
+---
+import Icon from './Icon.astro';
+---
+<button type="button" class="boton-video" aria-label="Pausar video" data-estado="play">
+  <Icon name="pause" size={16} class="i-pausa" />
+  <Icon name="play" size={16} class="i-play" />
+</button>
+
+<style>
+  .boton-video {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(7 42 25 / 0.55);
+    color: var(--blanco);
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      transform 0.2s var(--ease-out);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .boton-video {
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  @media (hover: hover) {
+    .boton-video:hover {
+      background: rgb(7 42 25 / 0.8);
+    }
+  }
+
+  .boton-video:active {
+    transform: scale(0.92);
+  }
+
+  .boton-video :global(.icon) {
+    grid-area: 1 / 1;
+    transition:
+      opacity 0.2s,
+      transform 0.25s var(--ease-out);
+  }
+
+  .boton-video[data-estado='play'] :global(.i-play),
+  .boton-video[data-estado='pausa'] :global(.i-pausa) {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+</style>

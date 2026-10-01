@@ -1,0 +1,129 @@
+---
+import { Picture } from 'astro:assets';
+import BotonVideo from './BotonVideo.astro';
+import invierno from '../assets/fotos/invierno-atardecer.jpg';
+import tarde from '../assets/fotos/tarde-dorada.jpg';
+import noche from '../assets/fotos/noche-predio.jpg';
+---
+<section class="anio" id="todo-el-ano" aria-labelledby="t-anio" data-zoom="1">
+  <div class="wrap anio__grilla">
+    <figure class="a-invierno" data-r="foto">
+      <Picture src={invierno} formats={['avif', 'webp']} widths={[500, 900, 1200]} sizes="(min-width: 1000px) 38vw, 90vw" alt="Atardecer de invierno: un árbol sin hojas se refleja en la pileta" loading="lazy" />
+      <figcaption>Invierno, al atardecer</figcaption>
+    </figure>
+    <div class="a-texto" data-r="sube">
+      <h2 id="t-anio">Abierto todo el año</h2>
+      <p class="lead">
+        En verano, la pileta y el arroyo. En invierno, la tranquilidad se multiplica: calefacción en la cabaña, fuego en la parrilla y atardeceres como este.
+      </p>
+    </div>
+    <figure class="a-verano" data-r="foto" style="--d:80ms">
+      <div class="a-video">
+        <video muted loop playsinline preload="none" poster="/video/pileta.webp" aria-label="Video: la pileta y el parque vistos desde el drone">
+          <source src="/video/pileta.mp4" type="video/mp4" />
+        </video>
+        <BotonVideo />
+      </div>
+      <figcaption>Verano, en la pileta</figcaption>
+    </figure>
+    <figure class="a-tarde" data-r="foto">
+      <Picture src={tarde} formats={['avif', 'webp']} widths={[700, 1200, 1600]} sizes="(min-width: 1000px) 55vw, 90vw" alt="Luz dorada de la tarde sobre las sierras; huéspedes descansando junto a la pileta" loading="lazy" />
+      <figcaption>Tardes largas, con las sierras de fondo</figcaption>
+    </figure>
+    <figure class="a-noche" data-r="foto" style="--d:100ms">
+      <Picture src={noche} formats={['avif', 'webp']} widths={[600, 1000]} sizes="(min-width: 1000px) 38vw, 90vw" alt="El predio de noche, con los caminos y la pileta iluminados" loading="lazy" />
+      <figcaption>De noche, el predio iluminado</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .anio {
+    padding-block: clamp(5rem, 10vw, 9rem);
+  }
+
+  .anio__grilla {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  @media (min-width: 1000px) {
+    .anio__grilla {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 3rem 2rem;
+      align-items: start;
+    }
+    .a-invierno {
+      grid-column: 1 / 6;
+      grid-row: 1 / 3;
+    }
+    .a-texto {
+      grid-column: 7 / 13;
+      align-self: end;
+      padding-top: 3rem;
+    }
+    .a-verano {
+      grid-column: 7 / 13;
+    }
+    .a-tarde {
+      grid-column: 1 / 8;
+    }
+    .a-noche {
+      grid-column: 8 / 13;
+      margin-top: 4rem;
+    }
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure :global(img),
+  .a-video {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .a-invierno :global(img) {
+    aspect-ratio: 3 / 4;
+  }
+
+  .a-video {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--verde-hondo);
+  }
+
+  .a-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .a-tarde :global(img) {
+    aspect-ratio: 16 / 10;
+  }
+
+  .a-noche :global(img) {
+    aspect-ratio: 4 / 3;
+  }
+
+  figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--tinta-suave);
+  }
+
+  .a-texto {
+    display: grid;
+    gap: 1.4rem;
+  }
+</style>
+
+<script>
+  import { videoEnPantalla } from '../scripts/video';
+  videoEnPantalla(document.querySelector<HTMLElement>('.a-video')!);
+</script>

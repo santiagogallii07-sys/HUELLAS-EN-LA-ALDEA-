@@ -1,0 +1,196 @@
+---
+// Videos del inicio encadenados con fundido, con "capítulos" (estilo historias) y botón de pausa.
+import Icon from '../Icon.astro';
+
+const clips = [
+  { id: 'aereo-total', nombre: 'El predio desde el aire' },
+  { id: 'complejo', nombre: 'Atardecer en el complejo' },
+];
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+---
+<div class:list={['secuencia', cls]} data-secuencia>
+  <picture class="secuencia__poster">
+    <source media="(max-width: 760px)" srcset={`/video/${clips[0].id}-movil.webp`} type="image/webp" />
+    <source srcset={`/video/${clips[0].id}.webp`} type="image/webp" />
+    <img src={`/video/${clips[0].id}.jpg`} alt="" fetchpriority="high" decoding="async" />
+  </picture>
+  {clips.map((c, i) => (
+    <video class="secuencia__clip" muted playsinline preload="none" aria-hidden="true" tabindex="-1" data-i={i}>
+      <source src={`/video/${c.id}-movil.mp4`} type="video/mp4" media="(max-width: 760px)" />
+      <source src={`/video/${c.id}.mp4`} type="video/mp4" />
+    </video>
+  ))}
+  <div class="secuencia__control">
+    <button type="button" class="secuencia__pausa" aria-label="Pausar video" data-estado="play">
+      <Icon name="pause" size={16} class="i-pausa" />
+      <Icon name="play" size={16} class="i-play" />
+    </button>
+    <ol class="secuencia__capitulos" aria-label="Videos">
+      {clips.map((c, i) => (
+        <li>
+          <button type="button" data-ir={i} aria-current={i === 0 ? 'true' : 'false'}>
+            <span class="secuencia__nombre">{c.nombre}</span>
+            <span class="secuencia__barra"><span class="secuencia__relleno"></span></span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  </div>
+</div>
+
+<style>
+  .secuencia {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--verde-noche);
+  }
+
+  .secuencia__poster img,
+  .secuencia__clip {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .secuencia__clip {
+    opacity: 0;
+    transition: opacity 0.8s var(--ease-out);
+  }
+
+  .secuencia__clip:global(.listo) {
+    opacity: 1;
+  }
+
+  .secuencia__clip:global(.activo) {
+    z-index: 1;
+  }
+
+  .secuencia__control {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--blanco);
+  }
+
+  .secuencia__pausa {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(7 42 25 / 0.55);
+    color: inherit;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      transform 0.2s var(--ease-out);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .secuencia__pausa {
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  @media (hover: hover) {
+    .secuencia__pausa:hover {
+      background: rgb(7 42 25 / 0.8);
+    }
+  }
+
+  .secuencia__pausa:active {
+    transform: scale(0.92);
+  }
+
+  .secuencia__pausa :global(.icon) {
+    grid-area: 1 / 1;
+    transition:
+      opacity 0.2s,
+      transform 0.25s var(--ease-out);
+  }
+
+  .secuencia__pausa[data-estado='play'] :global(.i-play),
+  .secuencia__pausa[data-estado='pausa'] :global(.i-pausa) {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .secuencia__capitulos {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .secuencia__capitulos button {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 9.5rem;
+    min-height: 44px;
+    padding: 0.35rem 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: 600 0.8125rem/1.2 var(--f-texto);
+    text-align: left;
+    cursor: pointer;
+    opacity: 0.72;
+    text-shadow: 0 1px 10px rgb(7 42 25 / 0.8);
+    transition: opacity 0.25s;
+  }
+
+  .secuencia__capitulos button[aria-current='true'],
+  .secuencia__capitulos button:hover {
+    opacity: 1;
+  }
+
+  .secuencia__barra {
+    display: block;
+    height: 3px;
+    border-radius: 3px;
+    background: rgb(255 255 255 / 0.35);
+    overflow: hidden;
+  }
+
+  .secuencia__relleno {
+    display: block;
+    height: 100%;
+    background: var(--naranja);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  @media (max-width: 760px) {
+    .secuencia__capitulos {
+      flex: 1;
+    }
+    .secuencia__capitulos li {
+      flex: 1;
+    }
+    .secuencia__capitulos button {
+      min-width: 0;
+      width: 100%;
+    }
+    .secuencia__nombre {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+</style>
+
+<script>
+  import { iniciarSecuencia } from '../../scripts/secuencia';
+  document.querySelectorAll<HTMLElement>('[data-secuencia]').forEach(iniciarSecuencia);
+</script>

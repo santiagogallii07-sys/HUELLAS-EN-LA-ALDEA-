@@ -1,0 +1,94 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import WhatsApp from './WhatsApp.astro';
+import { INSTAGRAM, MAIL, MAPS, WHATSAPP_VISIBLE, waLink } from '../datos';
+---
+<footer class="pie">
+  <div class="wrap pie__grilla">
+    <div class="pie__marca">
+      <Logo />
+      <p>Las Bajadas, Calamuchita, Córdoba.</p>
+    </div>
+    <ul class="pie__links">
+      <li><a href={waLink()} target="_blank" rel="noopener" data-wa="pie"><WhatsApp size={20} /> {WHATSAPP_VISIBLE}</a></li>
+      <li><a href={`mailto:${MAIL}`}><Icon name="mail" size={20} /> {MAIL}</a></li>
+      <li><a href={INSTAGRAM} target="_blank" rel="noopener"><Icon name="instagram" size={20} /> @huellasenlaaldea</a></li>
+      <li><a href={MAPS} target="_blank" rel="noopener"><Icon name="mapPin" size={20} /> Ver en Google Maps</a></li>
+    </ul>
+  </div>
+  <div class="wrap pie__base">
+    <span>© {new Date().getFullYear()} Huellas en la Aldea · Cabañas</span>
+    <span>Relieve: datos de elevación abiertos (Mapzen / AWS Terrain Tiles)</span>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    --logo-a: #fff;
+    --logo-b: var(--naranja);
+    --logo-c: rgb(255 255 255 / 0.8);
+    padding-block: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    background: var(--verde-noche);
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .pie__grilla {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 800px) {
+    .pie__grilla {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+
+  .pie__marca {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .pie__marca :global(.logo) {
+    width: 170px;
+    height: auto;
+  }
+
+  .pie__links {
+    display: grid;
+    gap: 0.2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pie__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 44px;
+    font-weight: 600;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  @media (hover: hover) {
+    .pie__links a:hover {
+      color: var(--naranja);
+    }
+  }
+
+  .pie__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+    font-size: 0.8125rem;
+    color: rgb(255 255 255 / 0.62);
+  }
+</style>

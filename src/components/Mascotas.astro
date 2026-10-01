@@ -1,0 +1,138 @@
+---
+// Rastro de huellas, calculado al compilar: en computadora sube por la columna izquierda,
+// en el celular cruza la franja de arriba. Nunca pasa por encima del texto.
+const N = 14;
+const huellas = Array.from({ length: N }, (_, i) => {
+  const t = i / (N - 1);
+  const xd = 5 + 26 * t + 3 * Math.sin(2 * Math.PI * t);
+  const yd = 90 - 80 * t;
+  const ad = (Math.atan2(-80 * 7, (26 + 6 * Math.PI * Math.cos(2 * Math.PI * t)) * 14.4) * 180) / Math.PI + 90;
+  const xm = -3 + 106 * t;
+  const ym = 7 + 3 * Math.sin(2 * Math.PI * t);
+  const am = (Math.atan2(6 * Math.PI * Math.cos(2 * Math.PI * t) * 6, 106 * 3.9) * 180) / Math.PI + 90;
+  return { xd, yd, ad, xm, ym, am, lado: i % 2 === 0 ? -1 : 1, i };
+});
+---
+<section class="mascotas" id="mascotas" aria-labelledby="t-mascotas" data-zoom="1">
+  <div class="rastro" aria-hidden="true">
+    {huellas.map((h) => (
+      <svg
+        class="huella"
+        viewBox="0 0 40 40"
+        style={`--xd:${h.xd.toFixed(2)}%;--yd:${h.yd.toFixed(2)}%;--ad:${h.ad.toFixed(1)}deg;--xm:${h.xm.toFixed(2)}%;--ym:${h.ym.toFixed(2)}%;--am:${h.am.toFixed(1)}deg;--l:${h.lado};--i:${h.i}`}
+      >
+        <path d="M20 19c-5.4 0-10 6.6-10 10.6 0 3 2.3 4.4 5 4.4 2.2 0 3.2-1 5-1s2.8 1 5 1c2.7 0 5-1.4 5-4.4 0-4-4.6-10.6-10-10.6Z" />
+        <ellipse cx="9.5" cy="16.5" rx="3.2" ry="4.2" transform="rotate(-28 9.5 16.5)" />
+        <ellipse cx="15.6" cy="9.8" rx="3.2" ry="4.4" transform="rotate(-8 15.6 9.8)" />
+        <ellipse cx="24.4" cy="9.8" rx="3.2" ry="4.4" transform="rotate(8 24.4 9.8)" />
+        <ellipse cx="30.5" cy="16.5" rx="3.2" ry="4.2" transform="rotate(28 30.5 16.5)" />
+      </svg>
+    ))}
+  </div>
+  <div class="wrap mascotas__texto" data-r="grupo">
+    <h2 id="t-mascotas">Tu perro también deja huellas</h2>
+    <p class="lead">
+      Somos pet friendly: tu mascota viaja con vos y disfruta del lugar tanto como vos. Avisanos cuando consultes así te esperamos a los dos.
+    </p>
+    <p class="mascotas__reglas"><em class="a-confirmar">[Reglas para mascotas: a confirmar]</em></p>
+  </div>
+</section>
+
+<style>
+  .mascotas {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(7rem, 14vw, 12rem);
+    background: var(--verde-papel);
+  }
+
+  .rastro {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .huella {
+    --a: var(--am);
+    position: absolute;
+    left: var(--xm);
+    top: var(--ym);
+    width: clamp(26px, 3.2vw, 44px);
+    height: auto;
+    fill: var(--naranja);
+    transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--l) * 60%));
+  }
+
+  @media (min-width: 1000px) {
+    .huella {
+      --a: var(--ad);
+      left: var(--xd);
+      top: var(--yd);
+    }
+  }
+
+
+  .mascotas.caminando .huella {
+    animation: pisada 0.5s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 110ms);
+  }
+
+  .mascotas:not(.caminando) .huella {
+    opacity: 0;
+  }
+
+  @keyframes pisada {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--l) * 60%)) scale(1.5);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mascotas:not(.caminando) .huella {
+      opacity: 1;
+    }
+    .mascotas.caminando .huella {
+      animation: none;
+    }
+  }
+
+  .mascotas__texto {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 1.4rem;
+  }
+
+  .mascotas__texto h2 {
+    max-width: 11ch;
+    font-size: clamp(2.8rem, 6.4vw, 5.6rem);
+    color: var(--verde);
+  }
+
+  .mascotas__texto .lead,
+  .mascotas__reglas {
+    padding: 0.2rem 0;
+    background: var(--verde-papel);
+    box-shadow: 0 0 0 0.6rem var(--verde-papel);
+  }
+
+  @media (min-width: 1000px) {
+    .mascotas__texto {
+      padding-left: 38%;
+    }
+  }
+</style>
+
+<script>
+  const s = document.querySelector<HTMLElement>('.mascotas')!;
+  new IntersectionObserver(
+    (entradas, obs) => {
+      if (entradas.some((e) => e.isIntersecting)) {
+        s.classList.add('caminando');
+        obs.disconnect();
+      }
+    },
+    { threshold: 0.35 },
+  ).observe(s);
+</script>

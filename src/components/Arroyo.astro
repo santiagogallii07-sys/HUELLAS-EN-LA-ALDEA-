@@ -1,0 +1,203 @@
+---
+import { Picture } from 'astro:assets';
+import BotonVideo from './BotonVideo.astro';
+import paseo from '../assets/fotos/arroyo-paseo.jpg';
+import dique from '../assets/fotos/dique-aereo.jpg';
+import escalera from '../assets/fotos/escalera-flores.jpg';
+import pato from '../assets/fotos/pato.jpg';
+import caminata from '../assets/fotos/caminata.jpg';
+---
+<section class="arroyo" id="arroyo" aria-labelledby="t-arroyo" data-zoom="1">
+  <div class="wrap arroyo__cuerpo">
+    <div class="arroyo__intro">
+      <div class="arroyo__texto" data-r="sube">
+        <h2 id="t-arroyo">El arroyo marca el ritmo</h2>
+        <p class="lead">
+          El Soconcho rodea el predio: hay botes, se puede pescar y caminar por el paseo de piedra del dique. Alrededor, monte nativo, pájaros y sombra de sobra.
+        </p>
+      </div>
+      <figure class="arroyo__foto" data-r="foto" style="--d:80ms">
+        <Picture src={paseo} formats={['avif', 'webp']} widths={[700, 1200, 1800]} sizes="(min-width: 1000px) 62vw, 92vw" alt="Dos personas caminando por el paseo de piedra del dique, con el agua cayendo" loading="lazy" />
+      </figure>
+    </div>
+    <div class="mosaico">
+      <figure class="m-video" data-r="foto">
+        <div class="m-video__caja">
+          <video muted loop playsinline preload="none" poster="/video/arroyo.webp" aria-label="Video: el arroyo Soconcho al atardecer, visto desde el drone">
+            <source src="/video/arroyo.mp4" type="video/mp4" />
+          </video>
+          <BotonVideo />
+        </div>
+        <figcaption>El Soconcho al atardecer, desde el drone</figcaption>
+      </figure>
+      <figure class="m-escalera" data-r="foto" style="--d:90ms">
+        <Picture src={escalera} formats={['avif', 'webp']} widths={[500, 900]} sizes="(min-width: 1000px) 30vw, 45vw" alt="Flores rosadas junto a una escalera de piedra que baja al arroyo" loading="lazy" />
+        <figcaption>Escalones al agua, entre flores</figcaption>
+      </figure>
+      <figure class="m-dique" data-r="foto">
+        <Picture src={dique} formats={['avif', 'webp']} widths={[700, 1200]} sizes="(min-width: 1000px) 40vw, 90vw" alt="El dique de piedra y el remanso del arroyo, vistos desde el drone" loading="lazy" />
+        <figcaption>El dique, desde el aire</figcaption>
+      </figure>
+      <figure class="m-caminata" data-r="foto" style="--d:90ms">
+        <Picture src={caminata} formats={['avif', 'webp']} widths={[500, 900]} sizes="(min-width: 1000px) 30vw, 90vw" alt="Pareja caminando entre algarrobos" loading="lazy" />
+        <figcaption>Caminatas entre algarrobos</figcaption>
+      </figure>
+      <figure class="m-pato" data-r="foto" style="--d:180ms">
+        <Picture src={pato} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 1000px) 22vw, 45vw" alt="Pato nadando en el arroyo" loading="lazy" />
+        <figcaption>Vecinos del arroyo</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .arroyo {
+    padding-block: clamp(5rem, 10vw, 9rem);
+  }
+
+  .arroyo__cuerpo {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+  }
+
+  /* La foto se muestra entera (3:2), al lado del texto en compu y debajo en el celular */
+  .arroyo__intro {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 1000px) {
+    .arroyo__intro {
+      grid-template-columns: minmax(0, 4.5fr) minmax(0, 7.5fr);
+      gap: 3.5rem;
+      align-items: center;
+    }
+  }
+
+  .arroyo__texto {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .arroyo__foto {
+    margin: 0;
+  }
+
+  .arroyo__foto :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+
+  .mosaico {
+    display: grid;
+    gap: clamp(1.2rem, 2.2vw, 1.8rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .mosaico figure {
+    margin: 0;
+  }
+
+  .mosaico :global(img),
+  .m-video__caja {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .m-video,
+  .m-dique,
+  .m-caminata {
+    grid-column: 1 / -1;
+  }
+
+  .m-video__caja {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--verde-hondo);
+  }
+
+  .m-video__caja video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .m-escalera :global(img),
+  .m-pato :global(img) {
+    aspect-ratio: 4 / 5;
+  }
+
+  .m-dique :global(img) {
+    aspect-ratio: 4 / 3;
+  }
+
+  .m-caminata :global(img) {
+    aspect-ratio: 16 / 10;
+  }
+
+  /* En el celular: video, las dos verticales juntas, y después las anchas */
+  .m-video {
+    order: 1;
+  }
+  .m-escalera {
+    order: 2;
+  }
+  .m-pato {
+    order: 3;
+  }
+  .m-dique {
+    order: 4;
+  }
+  .m-caminata {
+    order: 5;
+  }
+
+  @media (min-width: 1000px) {
+    .mosaico {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    .mosaico > figure {
+      order: 0;
+    }
+    .m-video {
+      grid-column: 1 / 9;
+    }
+    .m-escalera {
+      grid-column: 9 / 13;
+    }
+    .m-escalera :global(img) {
+      aspect-ratio: 5 / 6;
+    }
+    .m-dique {
+      grid-column: 1 / 6;
+    }
+    .m-caminata {
+      grid-column: 6 / 10;
+      margin-top: 3.5rem;
+    }
+    .m-caminata :global(img) {
+      aspect-ratio: 1;
+    }
+    .m-pato {
+      grid-column: 10 / 13;
+      margin-top: 7rem;
+    }
+  }
+
+  .mosaico figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--tinta-suave);
+  }
+</style>
+
+<script>
+  import { videoEnPantalla } from '../scripts/video';
+  videoEnPantalla(document.querySelector<HTMLElement>('.m-video__caja')!);
+</script>

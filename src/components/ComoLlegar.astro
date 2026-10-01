@@ -1,0 +1,145 @@
+---
+import Icon from './Icon.astro';
+import { MAPS } from '../datos';
+---
+<section class="llegar" id="como-llegar" aria-labelledby="t-llegar" data-zoom="0">
+  <div class="llegar__mapa" aria-hidden="true">
+    <canvas class="llegar__lienzo"></canvas>
+    <div class="llegar__rotulos">
+      <div class="rotf rotf--lugar" data-rot="lugar"><span class="rotf__punto"></span><span>Huellas en la Aldea</span></div>
+      <div class="rotf" data-rot="town"><span class="rotf__punto rotf__punto--chico"></span><span>Las Bajadas</span></div>
+      <div class="rotf" data-rot="peak"><svg width="12" height="10" viewBox="0 0 12 10"><path d="M6 0 12 10H0z" fill="currentColor" /></svg><span>1.198 m</span></div>
+    </div>
+  </div>
+  <div class="llegar__texto" data-r="grupo">
+    <h2 id="t-llegar">Cómo llegar</h2>
+    <p class="lead">
+      Estamos en Las Bajadas, Calamuchita, en pleno valle de las sierras de Córdoba.
+    </p>
+    <p>
+      El complejo está dentro de Rucalhue Aldea Serrana, un barrio cerrado. Cuando reservás, Agustín te pasa el código de ingreso y te explica cómo llegar hasta la cabaña.
+    </p>
+    <a class="btn btn--verde" href={MAPS} target="_blank" rel="noopener">
+      <Icon name="navigation" /> Abrir en Google Maps
+    </a>
+  </div>
+</section>
+
+<style>
+  .llegar {
+    display: grid;
+    background: var(--verde-papel);
+  }
+
+  @media (min-width: 1000px) {
+    .llegar {
+      grid-template-columns: 1.2fr 1fr;
+      min-height: 80vh;
+    }
+  }
+
+  .llegar__mapa {
+    position: relative;
+    min-height: 60vw;
+    overflow: hidden;
+    background: url('/terrain/relieve.webp') center / cover, var(--verde-papel);
+    background-blend-mode: multiply;
+  }
+
+  @media (min-width: 1000px) {
+    .llegar__mapa {
+      min-height: 0;
+    }
+  }
+
+  .llegar__lienzo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .llegar__rotulos {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+
+  .llegar__rotulos:global(.listo) {
+    opacity: 1;
+  }
+
+  .rotf {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: translate(var(--x, -999px), var(--y, -999px));
+    font-size: 0.8125rem;
+    font-weight: 650;
+    color: var(--verde-hondo);
+    white-space: nowrap;
+  }
+
+  .rotf svg {
+    margin-left: -6px;
+    color: var(--verde-hondo);
+  }
+
+  .rotf__punto {
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    border-radius: 50%;
+    background: var(--naranja);
+    box-shadow: 0 0 0 3px var(--verde-hondo);
+  }
+
+  .rotf__punto--chico {
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    background: var(--verde-hondo);
+    box-shadow: none;
+  }
+
+  .rotf--lugar span:last-child {
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    background: var(--verde-hondo);
+    color: var(--blanco);
+  }
+
+  .llegar__texto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.6rem;
+    padding: clamp(3rem, 7vw, 6rem) var(--gutter);
+  }
+
+  .llegar__texto > p:not(.lead) {
+    max-width: 38ch;
+    color: var(--tinta-suave);
+  }
+</style>
+
+<script>
+  import { dibujarMapa, PAPEL } from '../scripts/mapa';
+  const canvas = document.querySelector<HTMLCanvasElement>('.llegar__lienzo')!;
+  const rotulos = document.querySelector<HTMLElement>('.llegar__rotulos')!;
+  const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  new IntersectionObserver(
+    (e, obs) => {
+      if (e.some((x) => x.isIntersecting)) {
+        dibujarMapa(canvas, rotulos, { paleta: PAPEL, donde: [0.38, 0.5], factor: 1.02, animar: !quieto });
+        obs.disconnect();
+      }
+    },
+    { threshold: 0.3 },
+  ).observe(canvas);
+</script>

@@ -1,0 +1,306 @@
+---
+import Icon from './Icon.astro';
+import WhatsApp from './WhatsApp.astro';
+import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
+---
+<section class="consulta" id="consulta" aria-labelledby="t-consulta" data-zoom="0">
+  <div class="wrap consulta__grilla">
+    <div class="consulta__texto" data-r="grupo">
+      <h2 id="t-consulta">Escribinos y armamos tu estadía</h2>
+      <p class="lead">
+        Las reservas se hacen por WhatsApp con Agustín, que se encarga de la administración. Completá esto y te abrimos el chat con el mensaje listo para enviar.
+      </p>
+      <ul class="consulta__otros">
+        <li><a href={waLink()} target="_blank" rel="noopener" data-wa="directo"><WhatsApp size={20} /> {WHATSAPP_VISIBLE}</a></li>
+        <li><a href={`mailto:${MAIL}`}><Icon name="mail" size={20} /> {MAIL}</a></li>
+      </ul>
+    </div>
+
+    <form class="form" data-wa-num={WHATSAPP} novalidate data-r="sube" style="--d:120ms">
+      <div class="campo">
+        <label for="f-nombre">Tu nombre</label>
+        <input id="f-nombre" name="nombre" autocomplete="name" required />
+      </div>
+      <div class="form__fila">
+        <div class="campo">
+          <label for="f-llegada">Llegada</label>
+          <input id="f-llegada" name="llegada" type="date" required />
+        </div>
+        <div class="campo">
+          <label for="f-salida">Salida</label>
+          <input id="f-salida" name="salida" type="date" required />
+        </div>
+      </div>
+      <div class="form__fila">
+        <div class="campo">
+          <label for="f-personas">Personas</label>
+          <select id="f-personas" name="personas">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (con sofá cama)</option>
+          </select>
+        </div>
+        <fieldset class="campo campo--opciones">
+          <legend>¿Viene tu mascota?</legend>
+          <div class="opciones">
+            <label><input type="radio" name="mascota" value="no" checked /> <span>No</span></label>
+            <label><input type="radio" name="mascota" value="si" /> <span>Sí</span></label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="campo">
+        <label for="f-mensaje">Algo más <span class="opcional">(opcional)</span></label>
+        <textarea id="f-mensaje" name="mensaje" rows="3"></textarea>
+      </div>
+      <p class="form__error" role="alert" hidden></p>
+      <button class="btn form__enviar" type="submit">
+        <WhatsApp /> Abrir WhatsApp con mi consulta
+      </button>
+      <p class="form__nota">No guardamos tus datos: solo arman el mensaje.</p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .consulta {
+    padding-block: clamp(5rem, 10vw, 9rem);
+    background: var(--verde);
+    color: var(--blanco);
+  }
+
+  .consulta__grilla {
+    display: grid;
+    gap: 3rem;
+  }
+
+  @media (min-width: 1000px) {
+    .consulta__grilla {
+      grid-template-columns: 1fr minmax(0, 34rem);
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+
+  .consulta__texto {
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .consulta__texto .lead {
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .consulta__otros {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .consulta__otros a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 44px;
+    font-weight: 600;
+    text-decoration-color: rgb(255 255 255 / 0.4);
+    overflow-wrap: anywhere;
+  }
+
+  .form {
+    display: grid;
+    gap: 1.2rem;
+    padding: clamp(1.4rem, 3.5vw, 2.4rem);
+    background: var(--verde-claro);
+    color: var(--tinta);
+    border-radius: 18px;
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.5);
+  }
+
+  .form__fila {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  }
+
+  .campo {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .campo label,
+  .campo legend {
+    padding: 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .opcional {
+    font-weight: 500;
+    color: var(--tinta-suave);
+  }
+
+  input:not([type='radio']),
+  select,
+  textarea {
+    width: 100%;
+    min-height: 50px;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid #9fb2a4;
+    border-radius: 10px;
+    background: var(--blanco);
+    color: var(--tinta);
+    font: 500 1rem/1.4 var(--f-texto);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:not([type='radio']):focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgb(0 106 59 / 0.2);
+  }
+
+  [aria-invalid='true'] {
+    border-color: #b42318 !important;
+  }
+
+  .opciones {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+  }
+
+  .opciones label {
+    position: relative;
+    flex: 1;
+    cursor: pointer;
+  }
+
+  .opciones input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .opciones span {
+    display: grid;
+    place-items: center;
+    min-height: 50px;
+    border: 1.5px solid #9fb2a4;
+    border-radius: 10px;
+    background: var(--blanco);
+    font-weight: 600;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
+  }
+
+  .opciones input:checked + span {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: var(--blanco);
+  }
+
+  .opciones input:focus-visible + span {
+    outline: 3px solid var(--naranja);
+    outline-offset: 2px;
+  }
+
+  .form__error {
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    background: #fde8e6;
+    color: #8a1c12;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .form__enviar {
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.4rem;
+  }
+
+  .form__nota {
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+    text-align: center;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.consulta .form')!;
+  const error = form.querySelector<HTMLElement>('.form__error')!;
+  const llegada = form.querySelector<HTMLInputElement>('#f-llegada')!;
+  const salida = form.querySelector<HTMLInputElement>('#f-salida')!;
+
+  const hoy = new Date();
+  const iso = (d: Date) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  llegada.min = iso(hoy);
+  llegada.addEventListener('change', () => {
+    if (llegada.value) {
+      const d = new Date(llegada.value + 'T12:00');
+      d.setDate(d.getDate() + 1);
+      salida.min = iso(d);
+      if (!salida.value || salida.value <= llegada.value) salida.value = iso(new Date(d.getTime() + 86400000));
+    }
+  });
+
+  const fecha = (v: string) => {
+    const [a, m, d] = v.split('-');
+    return `${d}/${m}/${a}`;
+  };
+
+  const marcar = (el: HTMLElement, mal: boolean) => el.setAttribute('aria-invalid', String(mal));
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const datos = new FormData(form);
+    const nombre = String(datos.get('nombre') || '').trim();
+    const nombreEl = form.querySelector<HTMLInputElement>('#f-nombre')!;
+    let problema = '';
+    marcar(nombreEl, !nombre);
+    marcar(llegada, !llegada.value);
+    marcar(salida, !salida.value || salida.value <= llegada.value);
+    if (!nombre) problema = 'Contanos tu nombre así Agustín sabe con quién habla.';
+    else if (!llegada.value || !salida.value) problema = 'Elegí las fechas de llegada y salida.';
+    else if (salida.value <= llegada.value) problema = 'La salida tiene que ser después de la llegada.';
+
+    if (problema) {
+      error.textContent = problema;
+      error.hidden = false;
+      form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+      return;
+    }
+    error.hidden = true;
+
+    const noches = Math.round((+new Date(salida.value) - +new Date(llegada.value)) / 86400000);
+    const personas = String(datos.get('personas'));
+    const mascota = datos.get('mascota') === 'si';
+    const extra = String(datos.get('mensaje') || '').trim();
+    const texto = [
+      `¡Hola Agustín! Soy ${nombre}.`,
+      `Quería consultar por una cabaña del ${fecha(llegada.value)} al ${fecha(salida.value)} (${noches} ${noches === 1 ? 'noche' : 'noches'}), para ${personas} ${personas === '1' ? 'persona' : 'personas'}${mascota ? ', y vamos con mascota' : ''}.`,
+      extra,
+    ]
+      .filter(Boolean)
+      .join('\n');
+    const url = `https://wa.me/${form.dataset.waNum}?text=${encodeURIComponent(texto)}`;
+    const ventana = window.open(url, '_blank', 'noopener');
+    if (!ventana) window.location.href = url;
+  });
+</script>

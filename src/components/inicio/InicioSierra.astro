@@ -1,0 +1,207 @@
+---
+// Idea 2 — Línea de sierra: el video termina en el perfil real del terreno (de oeste a este, pasando por
+// el complejo), con la línea naranja del logo. El título va abajo, sobre fondo claro.
+import Secuencia from './Secuencia.astro';
+import Titulo from './Titulo.astro';
+import perfil from '../../data/perfil.json';
+
+const vals: number[] = perfil.valores;
+const lo = Math.min(...vals);
+const hi = Math.max(...vals);
+const n = vals.length;
+const pts = vals.map((v, i) => [(i / (n - 1)) * 1000, 196 - ((v - lo) / (hi - lo)) * 170]);
+
+// Curva suave (Catmull-Rom pasada a Bézier)
+let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+for (let i = 0; i < n - 1; i++) {
+  const p0 = pts[Math.max(0, i - 1)];
+  const p1 = pts[i];
+  const p2 = pts[i + 1];
+  const p3 = pts[Math.min(n - 1, i + 2)];
+  const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+  const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+  d += `C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+}
+const relleno = `${d}L1000 202L0 202Z`;
+
+// Dónde cae el complejo sobre la línea
+const fx = perfil.placeX * (n - 1);
+const i0 = Math.floor(fx);
+const yLugar = pts[i0][1] + (pts[Math.min(n - 1, i0 + 1)][1] - pts[i0][1]) * (fx - i0);
+const alturaLugar = ((200 - yLugar) / 200).toFixed(3);
+---
+<section class="inicio sierra" id="valle" aria-labelledby="titulo-principal" data-zoom="0">
+  <div class="sierra__video" data-fondo-oscuro>
+    <Secuencia class="sierra__secuencia" />
+    <svg class="sierra__borde" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
+      <path class="sierra__relleno" d={relleno} />
+      <path class="sierra__linea" d={d} vector-effect="non-scaling-stroke" />
+    </svg>
+    <span class="sierra__lugar" style={`left:${(perfil.placeX * 100).toFixed(2)}%;--alto:${alturaLugar}`} aria-hidden="true">
+      <span class="sierra__punto"></span>
+      <span class="sierra__rotulo">Huellas en la Aldea · 470 m</span>
+    </span>
+  </div>
+  <div class="wrap sierra__texto">
+    <Titulo tono="claro" />
+    <p class="sierra__nota">La línea naranja es el perfil real del terreno, de las sierras al llano, pasando por el complejo.</p>
+  </div>
+</section>
+
+<style>
+  .sierra {
+    --borde: clamp(110px, 24vh, 240px);
+    position: relative;
+    padding-bottom: clamp(2rem, 5vh, 3.5rem);
+  }
+
+  .sierra__video {
+    position: relative;
+    height: 66vh;
+    height: 66svh;
+    min-height: 440px;
+    overflow: hidden;
+  }
+
+  .sierra__borde {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    z-index: 2;
+    width: 100%;
+    height: var(--borde);
+    overflow: visible;
+  }
+
+  .sierra__relleno {
+    fill: var(--verde-claro);
+  }
+
+  .sierra__linea {
+    fill: none;
+    stroke: var(--naranja);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .sierra__lugar {
+    position: absolute;
+    z-index: 3;
+    bottom: calc(var(--borde) * var(--alto));
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transform: translate(-8px, 8px);
+  }
+
+  .sierra__punto {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--naranja);
+    box-shadow: 0 0 0 3px var(--verde-claro);
+  }
+
+  .sierra__rotulo {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    background: var(--verde-noche);
+    color: var(--blanco);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    white-space: nowrap;
+    transform: translateY(-110%);
+  }
+
+  .sierra :global(.sierra__secuencia .secuencia__control) {
+    top: 5.5rem;
+    right: var(--gutter);
+  }
+
+  .sierra__texto {
+    position: relative;
+    z-index: 4;
+    margin-top: clamp(0.5rem, 2vh, 1.5rem);
+  }
+
+  .sierra__texto :global(.titulo) {
+    display: grid;
+    gap: 1.4rem 4rem;
+  }
+
+  @media (min-width: 1000px) {
+    .sierra__texto :global(.titulo) {
+      grid-template-columns: 1.25fr 1fr;
+      align-items: end;
+    }
+    .sierra__texto :global(.titulo__acciones) {
+      margin-top: 1.4rem;
+    }
+  }
+
+  .sierra__nota {
+    margin-top: 1.6rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--tinta-suave);
+  }
+
+  @media (max-width: 760px) {
+    .sierra {
+      --borde: 13vh;
+    }
+    .sierra__video {
+      height: 58svh;
+      min-height: 360px;
+    }
+    .sierra :global(.sierra__secuencia .secuencia__control) {
+      top: calc(4.4rem + env(safe-area-inset-top));
+      left: var(--gutter);
+      right: var(--gutter);
+    }
+    .sierra__rotulo {
+      display: none;
+    }
+    .sierra__texto {
+      margin-top: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .sierra__video :global(.secuencia) {
+      animation: acercar 1.4s var(--ease-out) both;
+    }
+    :global(html.js) .sierra__linea {
+      animation: trazo 1s var(--ease-out) 0.15s both;
+    }
+    :global(html.js) .sierra__lugar {
+      animation: aparecer 0.45s var(--ease-out) 0.9s both;
+    }
+  }
+
+  @keyframes acercar {
+    from {
+      opacity: 0.5;
+      transform: scale(1.06);
+    }
+  }
+
+  @keyframes trazo {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      scale: 0.6;
+    }
+  }
+</style>

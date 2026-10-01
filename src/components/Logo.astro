@@ -1,0 +1,12 @@
+---
+// Logo trazado del original. Los colores salen de variables para usarlo sobre verde o sobre claro.
+import raw from '../assets/logo.svg?raw';
+interface Props { class?: string; title?: string }
+const { class: cls, title = 'Huellas en la Aldea – Cabañas' } = Astro.props;
+const svg = raw
+  .replace(/role="img" aria-label="[^"]*"/, `role="img" aria-label="${title}" class="logo ${cls ?? ''}"`)
+  .replace('fill="#006A3B"', 'fill="var(--logo-a, #006A3B)"')
+  .replace('fill="#F7A600"', 'fill="var(--logo-b, #F7A600)"')
+  .replace('fill="#575756"', 'fill="var(--logo-c, #575756)"');
+---
+<Fragment set:html={svg} />

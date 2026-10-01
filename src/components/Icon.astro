@@ -1,0 +1,61 @@
+---
+// Íconos de lucide-static, en línea y con trazo heredado del texto.
+import bedDouble from 'lucide-static/icons/bed-double.svg?raw';
+import bedSingle from 'lucide-static/icons/bed-single.svg?raw';
+import snowflake from 'lucide-static/icons/snowflake.svg?raw';
+import flame from 'lucide-static/icons/flame.svg?raw';
+import wifi from 'lucide-static/icons/wifi.svg?raw';
+import tv from 'lucide-static/icons/tv.svg?raw';
+import car from 'lucide-static/icons/car.svg?raw';
+import users from 'lucide-static/icons/users.svg?raw';
+import sofa from 'lucide-static/icons/sofa.svg?raw';
+import bath from 'lucide-static/icons/bath.svg?raw';
+import cookingPot from 'lucide-static/icons/cooking-pot.svg?raw';
+import beef from 'lucide-static/icons/beef.svg?raw';
+import waves from 'lucide-static/icons/waves.svg?raw';
+import fish from 'lucide-static/icons/fish.svg?raw';
+import sailboat from 'lucide-static/icons/sailboat.svg?raw';
+import trees from 'lucide-static/icons/trees.svg?raw';
+import goal from 'lucide-static/icons/goal.svg?raw';
+import droplets from 'lucide-static/icons/droplets.svg?raw';
+import utensils from 'lucide-static/icons/utensils.svg?raw';
+import mail from 'lucide-static/icons/mail.svg?raw';
+// lucide ya no trae logos de marcas: este es el glifo de Instagram con su mismo trazo.
+const instagram = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
+import navigation from 'lucide-static/icons/navigation.svg?raw';
+import arrowDown from 'lucide-static/icons/arrow-down.svg?raw';
+import plus from 'lucide-static/icons/plus.svg?raw';
+import minus from 'lucide-static/icons/minus.svg?raw';
+import chevronLeft from 'lucide-static/icons/chevron-left.svg?raw';
+import chevronRight from 'lucide-static/icons/chevron-right.svg?raw';
+import x from 'lucide-static/icons/x.svg?raw';
+import menu from 'lucide-static/icons/menu.svg?raw';
+import pawPrint from 'lucide-static/icons/paw-print.svg?raw';
+import mapPin from 'lucide-static/icons/map-pin.svg?raw';
+import calendar from 'lucide-static/icons/calendar.svg?raw';
+import dam from 'lucide-static/icons/dam.svg?raw';
+import stone from 'lucide-static/icons/stone.svg?raw';
+import play from 'lucide-static/icons/play.svg?raw';
+import pause from 'lucide-static/icons/pause.svg?raw';
+
+const icons = {
+  bedDouble, bedSingle, snowflake, flame, wifi, tv, car, users, sofa, bath, cookingPot, beef, waves, fish,
+  sailboat, trees, goal, droplets, utensils, mail, instagram, navigation, arrowDown, plus, minus,
+  chevronLeft, chevronRight, x, menu, pawPrint, mapPin, calendar, dam, stone, play, pause,
+};
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  class?: string;
+  size?: number;
+}
+const { name, class: cls, size = 24 } = Astro.props;
+const svg = icons[name]
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/class="[^"]*"/, '')
+  .replace(/width="24"/, `width="${size}"`)
+  .replace(/height="24"/, `height="${size}"`)
+  .replace('<svg', `<svg aria-hidden="true" focusable="false" class="icon ${cls ?? ''}"`);
+---
+<Fragment set:html={svg} />

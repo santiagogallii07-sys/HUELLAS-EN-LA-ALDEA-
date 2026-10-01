@@ -1,0 +1,383 @@
+---
+import { Picture } from 'astro:assets';
+import Icon, { type IconName } from './Icon.astro';
+import cenital from '../assets/fotos/complejo-cenital.jpg';
+import pileta from '../assets/fotos/pileta-dia.jpg';
+import jacuzzi from '../assets/fotos/jacuzzi.jpg';
+import remanso from '../assets/fotos/arroyo-remanso.jpg';
+import paseo from '../assets/fotos/arroyo-paseo.jpg';
+import aljibe from '../assets/fotos/aljibe.jpg';
+import juegos from '../assets/fotos/juegos-metegol.jpg';
+
+type Ref = {
+  id: string;
+  icon: IconName;
+  nombre: string;
+  texto: string;
+  pos?: [number, number];
+  foto?: ImageMetadata;
+  alt?: string;
+};
+// pos: porcentaje sobre la foto cenital. Las cabañas no se marcan a propósito.
+const refs: Ref[] = [
+  { id: 'pileta', icon: 'waves', nombre: 'Pileta de 24 m', texto: 'Con reposeras, sombrillas y luces para disfrutarla también de noche.', pos: [53.8, 52], foto: pileta, alt: 'Pileta con reposeras y sombrillas, vista entre los árboles' },
+  { id: 'jacuzzi', icon: 'droplets', nombre: 'Jacuzzi', texto: 'Dentro de la pileta, para quedarse charlando.', foto: jacuzzi, alt: 'Dos amigas sonriendo en el jacuzzi' },
+  { id: 'arroyo', icon: 'fish', nombre: 'Arroyo Soconcho', texto: 'Rodea el predio. Hay botes y se puede pescar, sin costo extra.', pos: [76.5, 36], foto: remanso, alt: 'Remanso del arroyo rodeado de monte' },
+  { id: 'dique', icon: 'dam', nombre: 'Dique y paseo de piedra', texto: 'Un paseo de piedra sobre el agua, para la caminata de la tarde.', pos: [68.3, 29.5], foto: paseo, alt: 'Dos personas caminando sobre el paseo de piedra del dique' },
+  { id: 'aljibe', icon: 'stone', nombre: 'Aljibe y muros de piedra', texto: 'Piedra trabajada a mano en los espacios comunes.', pos: [54.8, 36.4], foto: aljibe, alt: 'Aljibe de piedra con faroles y escalera' },
+  { id: 'juegos', icon: 'trees', nombre: 'Juegos bajo los árboles', texto: 'Metegol y mesas a la sombra de los algarrobos, y juegos para chicos.', foto: juegos, alt: 'Dos amigos jugando al metegol bajo los árboles' },
+  { id: 'quincho', icon: 'beef', nombre: 'Quincho y SUM', texto: 'Asador grande, horno de barro y fogonero. Se puede reservar para eventos.' },
+];
+---
+<section class="predio" id="predio" aria-labelledby="t-predio" data-zoom="1">
+  <div class="wrap predio__cabeza">
+    <h2 id="t-predio" data-r="sube">Espacio de sobra para bajar un cambio</h2>
+    <p class="lead" data-r="sube" style="--d:80ms">
+      Las cabañas están repartidas por el predio, con espacio entre una y otra, y el arroyo Soconcho lo rodea casi entero. Tocá cada referencia para verla de cerca.
+    </p>
+  </div>
+
+  <div class="predio__mapa">
+    <figure class="predio__foto" data-r="foto">
+      <Picture src={cenital} formats={['avif', 'webp']} widths={[800, 1400, 2000]} sizes="(min-width: 1000px) 66vw, 100vw" alt="Vista aérea del predio: el arroyo rodea las cabañas y la pileta" loading="lazy" />
+      {refs.filter((r) => r.pos).map((r, i) => (
+        <button
+          type="button"
+          class="marca"
+          style={`left:${r.pos![0]}%;top:${r.pos![1]}%;--n:${i}`}
+          data-ref={r.id}
+          aria-label={r.nombre}
+          aria-pressed="false"
+        >
+          <Icon name={r.icon} size={16} />
+        </button>
+      ))}
+      <div class="predio__lupa" aria-live="polite">
+        {refs.filter((r) => r.foto).map((r) => (
+          <div class="lupa" data-lupa={r.id} hidden>
+            <Picture src={r.foto!} formats={['avif', 'webp']} widths={[480, 800]} sizes="340px" alt={r.alt!} loading="lazy" />
+            <span>{r.nombre}</span>
+          </div>
+        ))}
+      </div>
+      <figcaption class="sr-only">Foto aérea del predio con referencias</figcaption>
+    </figure>
+
+    <div class="leyenda" data-r="sube" style="--d:120ms">
+      <p class="rotulo leyenda__titulo">Referencias</p>
+      <ul>
+        {refs.map((r) => (
+          <li>
+            <button type="button" class="leyenda__item" data-ref={r.id} aria-expanded="false">
+              <span class="leyenda__simbolo"><Icon name={r.icon} size={18} /></span>
+              <span class="leyenda__texto">
+                <strong>{r.nombre}</strong>
+                <span>{r.texto}</span>
+              </span>
+            </button>
+            {r.foto && (
+              <div class="leyenda__foto" data-foto={r.id} hidden>
+                <Picture src={r.foto} formats={['avif', 'webp']} widths={[480, 800]} sizes="90vw" alt={r.alt!} loading="lazy" />
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .predio {
+    padding-block: clamp(5rem, 10vw, 9rem) clamp(4rem, 8vw, 7rem);
+  }
+
+  .predio__cabeza {
+    display: grid;
+    gap: 1.4rem 4rem;
+    align-items: end;
+  }
+
+  @media (min-width: 1000px) {
+    .predio__cabeza {
+      grid-template-columns: 1.2fr 1fr;
+    }
+    .predio__cabeza h2 {
+      max-width: 12ch;
+    }
+  }
+
+  .predio__mapa {
+    display: grid;
+    gap: 2rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 1000px) {
+    .predio__mapa {
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+      gap: 3rem;
+      padding-right: var(--gutter);
+      align-items: start;
+    }
+  }
+
+  .predio__foto {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--verde-hondo);
+  }
+
+  @media (min-width: 1000px) {
+    .predio__foto {
+      border-radius: 0 16px 16px 0;
+    }
+  }
+
+  .predio__foto :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .predio__foto:not(:global(.visto)) .marca {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    .marca {
+      transition:
+        opacity 0.3s var(--ease-out),
+        transform 0.45s var(--ease-out);
+      transition-delay: calc(0.35s + var(--n) * 70ms);
+    }
+  }
+
+  .marca {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--verde);
+    cursor: pointer;
+  }
+
+  .marca::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    background: var(--blanco);
+    box-shadow:
+      0 0 0 2px var(--verde),
+      0 6px 14px -4px rgb(0 0 0 / 0.5);
+    transition:
+      background-color 0.25s,
+      transform 0.4s var(--ease-out);
+  }
+
+  .marca :global(.icon) {
+    position: relative;
+  }
+
+  @media (hover: hover) {
+    .marca:hover::before {
+      transform: scale(1.15);
+    }
+  }
+
+  .marca[aria-pressed='true'] {
+    color: var(--verde-noche);
+  }
+
+  .marca[aria-pressed='true']::before {
+    animation: pop 0.45s var(--ease-out);
+    background: var(--naranja);
+    transform: scale(1.2);
+    box-shadow:
+      0 0 0 3px var(--verde-noche),
+      0 6px 14px -4px rgb(0 0 0 / 0.5);
+  }
+
+  .predio__lupa {
+    position: absolute;
+    left: clamp(1rem, 2.5vw, 2rem);
+    bottom: clamp(1rem, 2.5vw, 2rem);
+    width: min(340px, 40%);
+  }
+
+  .lupa {
+    padding: 6px;
+    background: var(--blanco);
+    border-radius: 10px;
+    box-shadow: 0 20px 40px -18px rgb(0 0 0 / 0.65);
+    animation: lupa 0.35s var(--ease-out);
+  }
+
+  @keyframes pop {
+    0% {
+      transform: scale(0.8);
+    }
+    60% {
+      transform: scale(1.32);
+    }
+    100% {
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes lupa {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+    }
+  }
+
+  .lupa :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .lupa span {
+    display: block;
+    padding: 0.55rem 0.4rem 0.3rem;
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: var(--tinta);
+  }
+
+  .leyenda {
+    padding-inline: var(--gutter);
+  }
+
+  @media (min-width: 1000px) {
+    .leyenda {
+      padding: 0;
+    }
+  }
+
+  .leyenda__titulo {
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--tinta);
+    color: var(--tinta);
+  }
+
+  .leyenda ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .leyenda li {
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .leyenda__item {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem 0.25rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .leyenda__simbolo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--blanco);
+    color: var(--verde);
+    box-shadow: 0 0 0 1.5px var(--verde);
+    transition: background-color 0.25s;
+  }
+
+  .leyenda__item[aria-expanded='true'] .leyenda__simbolo {
+    background: var(--naranja);
+    color: var(--verde-noche);
+    box-shadow: 0 0 0 1.5px var(--verde-noche);
+  }
+
+  .leyenda__texto {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .leyenda__texto strong {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    line-height: 1.3;
+  }
+
+  .leyenda__texto span {
+    font-size: 0.975rem;
+    line-height: 1.5;
+    color: var(--tinta-suave);
+  }
+
+  @media (hover: hover) {
+    .leyenda__item:hover strong {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 0.2em;
+    }
+  }
+
+  .leyenda__foto {
+    padding: 0 0 1rem 3.4rem;
+    animation: lupa 0.35s var(--ease-out);
+  }
+
+  .leyenda__foto :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  @media (min-width: 1000px) {
+    .leyenda__foto {
+      display: none;
+    }
+  }
+
+  @media (max-width: 999px) {
+    .predio__lupa {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>('.predio')!;
+  const marcas = [...raiz.querySelectorAll<HTMLButtonElement>('.marca')];
+  const items = [...raiz.querySelectorAll<HTMLButtonElement>('.leyenda__item')];
+  let actual: string | null = null;
+
+  const elegir = (id: string | null) => {
+    actual = actual === id ? null : id;
+    marcas.forEach((m) => m.setAttribute('aria-pressed', String(m.dataset.ref === actual)));
+    items.forEach((b) => b.setAttribute('aria-expanded', String(b.dataset.ref === actual)));
+    raiz.querySelectorAll<HTMLElement>('[data-lupa]').forEach((l) => (l.hidden = l.dataset.lupa !== actual));
+    raiz.querySelectorAll<HTMLElement>('[data-foto]').forEach((l) => (l.hidden = l.dataset.foto !== actual));
+  };
+
+  [...marcas, ...items].forEach((b) => b.addEventListener('click', () => elegir(b.dataset.ref!)));
+  elegir('pileta');
+</script>

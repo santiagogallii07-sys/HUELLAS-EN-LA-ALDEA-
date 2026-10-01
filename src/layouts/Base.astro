@@ -1,0 +1,56 @@
+---
+import '@fontsource/gloock/400.css';
+import '@fontsource-variable/montserrat/wght.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Huellas en la Aldea · Cabañas en Las Bajadas, Córdoba',
+  description = 'Cabañas a orillas del arroyo Soconcho, en Las Bajadas (Calamuchita, Córdoba). Pileta con jacuzzi, parrilla propia, pet friendly y abierto todo el año. Consultas por WhatsApp.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#006a3b" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="es_AR" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/terrain/terrain.json" as="fetch" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LodgingBusiness',
+      name: 'Huellas en la Aldea – Cabañas',
+      description,
+      telephone: '+5493512142137',
+      email: 'huellasenlaaldea@gmail.com',
+      petsAllowed: true,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Rucalhue Aldea Serrana',
+        addressLocality: 'Las Bajadas',
+        addressRegion: 'Córdoba',
+        addressCountry: 'AR',
+      },
+      geo: { '@type': 'GeoCoordinates', latitude: -32.12166, longitude: -64.33176 },
+      sameAs: ['https://www.instagram.com/huellasenlaaldea/'],
+    })} />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+    <slot />
+    <script>
+      import '../scripts/revelar';
+    </script>
+  </body>
+</html>

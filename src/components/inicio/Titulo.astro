@@ -1,0 +1,149 @@
+---
+// Título, bajada y botones del inicio. "oscuro" = texto blanco sobre video; "claro" = texto verde sobre fondo claro.
+import Icon from '../Icon.astro';
+import WhatsApp from '../WhatsApp.astro';
+import { waLink } from '../../datos';
+
+interface Props {
+  tono?: 'oscuro' | 'claro';
+}
+const { tono = 'oscuro' } = Astro.props;
+const titulo = 'La tranquilidad tiene su lugar';
+---
+<div class:list={['titulo', `titulo--${tono}`]}>
+  <h1 id="titulo-principal" aria-label={titulo}>
+    {titulo.split(' ').map((p, i) => (
+      <Fragment><span class="pal" aria-hidden="true"><span style={`--i:${i}`}>{p}</span></span>{' '}</Fragment>
+    ))}
+  </h1>
+  <div class="titulo__resto">
+    <p class="titulo__bajada">
+      Cabañas a orillas del arroyo Soconcho, en Las Bajadas, Calamuchita. Monte, sierras y silencio. Vení a desconectarte.
+    </p>
+    <div class="titulo__acciones">
+      <a class="btn" href={waLink()} target="_blank" rel="noopener" data-wa="inicio">
+        <WhatsApp /> Consultá por WhatsApp
+      </a>
+      <a class="titulo__bajar" href="#predio">
+        <Icon name="arrowDown" size={20} /> Conocé el lugar
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .titulo h1 {
+    font-size: var(--h1, clamp(2.9rem, 5.4vw, 5.2rem));
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+  }
+
+  .titulo--oscuro {
+    color: var(--blanco);
+  }
+
+  .titulo--oscuro h1 {
+    text-shadow: 0 2px 28px rgb(7 42 25 / 0.5);
+  }
+
+  .titulo--claro h1 {
+    color: var(--verde-hondo);
+  }
+
+  .pal {
+    display: inline-block;
+    overflow: clip;
+    overflow-clip-margin: 0.25em;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+    vertical-align: top;
+  }
+
+  .pal > span {
+    display: inline-block;
+  }
+
+  .titulo__bajada {
+    max-width: 34ch;
+    font-size: clamp(1.0625rem, 1.3vw, 1.2rem);
+    line-height: 1.55;
+  }
+
+  .titulo--oscuro .titulo__bajada {
+    color: rgb(255 255 255 / 0.95);
+    text-shadow: 0 1px 14px rgb(7 42 25 / 0.7);
+  }
+
+  .titulo--claro .titulo__bajada {
+    color: var(--tinta-suave);
+  }
+
+  .titulo__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.6rem;
+    margin-top: 1.7rem;
+  }
+
+  .titulo__bajar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .titulo--claro .titulo__bajar {
+    color: var(--verde);
+  }
+
+  .titulo__bajar :global(.icon) {
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .titulo__bajar:hover :global(.icon) {
+      transform: translateY(3px);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .titulo__acciones .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Entrada corta: palabras que suben, después la bajada y los botones */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .pal > span {
+      animation: palabra 0.6s var(--ease-out) both;
+      animation-delay: calc(var(--retraso, 0.2s) + var(--i) * 45ms);
+    }
+    :global(html.js) .titulo__bajada,
+    :global(html.js) .titulo__acciones {
+      animation: aparecer 0.5s var(--ease-out) both;
+    }
+    :global(html.js) .titulo__bajada {
+      animation-delay: calc(var(--retraso, 0.2s) + 0.25s);
+    }
+    :global(html.js) .titulo__acciones {
+      animation-delay: calc(var(--retraso, 0.2s) + 0.35s);
+    }
+  }
+
+  @keyframes palabra {
+    from {
+      transform: translateY(105%);
+    }
+  }
+
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+</style>
