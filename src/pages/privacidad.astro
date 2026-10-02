@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import PaginaSimple from '../components/PaginaSimple.astro';
+import { MAIL } from '../datos';
+---
+<Base title="Política de privacidad · Huellas en la Aldea" description="Cómo usa Huellas en la Aldea los datos de quienes visitan su web.">
+  <PaginaSimple>
+    <h1>Política de privacidad</h1>
+    <p>En Huellas en la Aldea cuidamos tus datos. Esta web es informativa: no tiene cuentas de usuario, no cobra pagos y no guarda datos personales.</p>
+
+    <h2>El formulario de consulta</h2>
+    <p>Lo que escribís en el formulario (nombre, fechas, cantidad de personas, si venís con mascota y tu mensaje) no se guarda en esta web: solo se usa para armar un mensaje que vos enviás por WhatsApp. A partir de ahí, la conversación sigue en WhatsApp y usamos esos datos únicamente para responder tu consulta y gestionar tu reserva.</p>
+
+    <h2>Estadísticas de visitas</h2>
+    <p>Usamos estadísticas anónimas de Cloudflare para saber cuántas personas visitan la web. No usan cookies ni identifican a nadie.</p>
+
+    <h2>Cookies</h2>
+    <p>Esta web no usa cookies.</p>
+
+    <h2>Tus derechos</h2>
+    <p>Según la Ley 25.326 de Protección de Datos Personales, podés pedirnos acceder, corregir o borrar tus datos escribiendo a <a href={`mailto:${MAIL}`}>{MAIL}</a>.</p>
+
+    <a class="btn btn--verde" href="/">Volver al inicio</a>
+  </PaginaSimple>
+</Base>

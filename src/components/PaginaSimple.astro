@@ -1,0 +1,40 @@
+---
+// Página de texto sencilla (404, privacidad): logo, contenido y vuelta al inicio.
+import Logo from './Logo.astro';
+---
+<header class="simple__cab">
+  <a href="/" aria-label="Huellas en la Aldea, ir al inicio"><Logo /></a>
+</header>
+<main id="contenido" class="simple">
+  <slot />
+</main>
+
+<style>
+  .simple__cab {
+    padding: 1.5rem var(--gutter);
+  }
+  .simple__cab :global(.logo) {
+    width: 120px;
+    height: auto;
+  }
+  .simple {
+    width: min(100% - 2 * var(--gutter), 46rem);
+    margin: clamp(2rem, 6vw, 4rem) auto 5rem;
+  }
+  .simple :global(h1) {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    color: var(--verde-hondo);
+  }
+  .simple :global(h2) {
+    font-size: 1.6rem;
+    margin-top: 2.4rem;
+  }
+  .simple :global(p),
+  .simple :global(ul) {
+    margin-top: 1rem;
+    color: var(--tinta-suave);
+  }
+  .simple :global(.btn) {
+    margin-top: 2rem;
+  }
+</style>

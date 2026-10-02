@@ -6,11 +6,16 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  /** páginas que no queremos en Google (ej. la 404) */
+  noIndex?: boolean;
 }
 const {
   title = 'Huellas en la Aldea · Cabañas en Las Bajadas, Córdoba',
   description = 'Cabañas a orillas del arroyo Soconcho, en Las Bajadas (Calamuchita, Córdoba). Pileta con jacuzzi, parrilla propia, pet friendly y abierto todo el año. Consultas por WhatsApp.',
+  noIndex = false,
 } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const imagen = new URL('/compartir.jpg', Astro.site);
 ---
 <!doctype html>
 <html lang="es-AR">
@@ -25,6 +30,15 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content="Huellas en la Aldea" />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagen} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Atardecer sobre la pileta de Huellas en la Aldea" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonica} />
+    {noIndex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/terrain/terrain.json" as="fetch" crossorigin />
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -43,6 +57,8 @@ const {
         addressCountry: 'AR',
       },
       geo: { '@type': 'GeoCoordinates', latitude: -32.12166, longitude: -64.33176 },
+      url: 'https://huellasenlaaldea.com.ar/',
+      image: 'https://huellasenlaaldea.com.ar/compartir.jpg',
       sameAs: ['https://www.instagram.com/huellasenlaaldea/'],
     })} />
   </head>
