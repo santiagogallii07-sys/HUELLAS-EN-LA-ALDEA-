@@ -8,24 +8,36 @@ import remanso from '../assets/fotos/arroyo-remanso.jpg';
 import paseo from '../assets/fotos/arroyo-paseo.jpg';
 import aljibe from '../assets/fotos/aljibe.jpg';
 import juegos from '../assets/fotos/juegos-metegol.jpg';
+import laguna from '../assets/fotos/laguna.jpg';
+import embarcadero1 from '../assets/fotos/embarcadero-1.jpg';
+import embarcadero2 from '../assets/fotos/embarcadero-2.jpg';
+import barco from '../assets/fotos/barco-1.jpg';
+import volley from '../assets/fotos/volley-1.jpg';
 
+type Foto = { src: ImageMetadata; alt: string };
 type Ref = {
   id: string;
   icon: IconName;
   nombre: string;
   texto: string;
   pos?: [number, number];
-  foto?: ImageMetadata;
-  alt?: string;
+  fotos?: Foto[];
 };
-// pos: porcentaje sobre la foto cenital. Las cabañas no se marcan a propósito.
+// pos: porcentaje sobre la foto cenital (marcado por el cliente). Las cabañas no se marcan a propósito.
 const refs: Ref[] = [
-  { id: 'pileta', icon: 'waves', nombre: 'Pileta de 24 m', texto: 'Con reposeras, sombrillas y luces para disfrutarla también de noche.', pos: [53.8, 52], foto: pileta, alt: 'Pileta con reposeras y sombrillas, vista entre los árboles' },
-  { id: 'jacuzzi', icon: 'droplets', nombre: 'Jacuzzi', texto: 'Dentro de la pileta, para quedarse charlando.', foto: jacuzzi, alt: 'Dos amigas sonriendo en el jacuzzi' },
-  { id: 'arroyo', icon: 'fish', nombre: 'Arroyo Soconcho', texto: 'Rodea el predio. Hay botes y se puede pescar, sin costo extra.', pos: [76.5, 36], foto: remanso, alt: 'Remanso del arroyo rodeado de monte' },
-  { id: 'dique', icon: 'dam', nombre: 'Dique y paseo de piedra', texto: 'Un paseo de piedra sobre el agua, para la caminata de la tarde.', pos: [68.3, 29.5], foto: paseo, alt: 'Dos personas caminando sobre el paseo de piedra del dique' },
-  { id: 'aljibe', icon: 'stone', nombre: 'Aljibe y muros de piedra', texto: 'Piedra trabajada a mano en los espacios comunes.', pos: [54.8, 36.4], foto: aljibe, alt: 'Aljibe de piedra con faroles y escalera' },
-  { id: 'juegos', icon: 'trees', nombre: 'Juegos bajo los árboles', texto: 'Metegol y mesas a la sombra de los algarrobos, y juegos para chicos.', foto: juegos, alt: 'Dos amigos jugando al metegol bajo los árboles' },
+  { id: 'pileta', icon: 'wavesLadder', nombre: 'Pileta de 24 m', texto: 'Con reposeras, sombrillas y luces para disfrutarla también de noche.', pos: [53.8, 52], fotos: [{ src: pileta, alt: 'Pileta con reposeras y sombrillas, vista entre los árboles' }] },
+  { id: 'jacuzzi', icon: 'droplets', nombre: 'Jacuzzi', texto: 'Dentro de la pileta, para quedarse charlando.', fotos: [{ src: jacuzzi, alt: 'Dos amigas sonriendo en el jacuzzi' }] },
+  { id: 'laguna', icon: 'waves', nombre: 'Laguna', texto: 'Agua quieta y sombra de árboles, con mesas para sentarse a mirarla.', pos: [72.5, 36.8], fotos: [{ src: laguna, alt: 'Mesa a la sombra de un árbol, junto a la laguna' }] },
+  { id: 'dique', icon: 'dam', nombre: 'Dique y paseo de piedra', texto: 'Un paseo de piedra sobre el agua, para la caminata de la tarde.', pos: [68.3, 29.5], fotos: [{ src: paseo, alt: 'Dos personas caminando sobre el paseo de piedra del dique' }] },
+  { id: 'barcos', icon: 'sailboat', nombre: 'Botes', texto: 'Para salir a remar por el arroyo, sin costo extra.', pos: [70, 54.6], fotos: [{ src: barco, alt: 'Tres personas remando en un bote; otro bote amarrado en la orilla' }] },
+  { id: 'embarcadero', icon: 'anchor', nombre: 'Embarcadero', texto: 'Escalones de piedra junto al agua, donde esperan los botes.', pos: [63.9, 59.9], fotos: [
+    { src: embarcadero1, alt: 'Embarcadero de piedra con botes y una canoa sobre el arroyo' },
+    { src: embarcadero2, alt: 'Botes amarrados junto a la escalera de piedra del embarcadero' },
+  ] },
+  { id: 'arroyo', icon: 'fish', nombre: 'Arroyo Soconcho', texto: 'Rodea el predio. Se puede pescar, sin costo extra.', pos: [49.5, 82.1], fotos: [{ src: remanso, alt: 'Remanso del arroyo rodeado de monte' }] },
+  { id: 'volley', icon: 'volleyball', nombre: 'Cancha de vóley', texto: 'Sobre el pasto, para el partido de la tarde.', pos: [62.3, 33.9], fotos: [{ src: volley, alt: 'Grupo jugando al vóley en la cancha de pasto, con las sierras de fondo' }] },
+  { id: 'aljibe', icon: 'stone', nombre: 'Aljibe y muros de piedra', texto: 'Piedra trabajada a mano en los espacios comunes.', pos: [54.8, 36.4], fotos: [{ src: aljibe, alt: 'Aljibe de piedra con faroles y escalera' }] },
+  { id: 'juegos', icon: 'trees', nombre: 'Juegos bajo los árboles', texto: 'Metegol y mesas a la sombra de los algarrobos, y juegos para chicos.', fotos: [{ src: juegos, alt: 'Dos amigos jugando al metegol bajo los árboles' }] },
   { id: 'quincho', icon: 'beef', nombre: 'Quincho y SUM', texto: 'Asador grande, horno de barro y fogonero. Se puede reservar para eventos.' },
 ];
 ---
@@ -53,9 +65,11 @@ const refs: Ref[] = [
         </button>
       ))}
       <div class="predio__lupa" aria-live="polite">
-        {refs.filter((r) => r.foto).map((r) => (
-          <div class="lupa" data-lupa={r.id} hidden>
-            <Picture src={r.foto!} formats={['avif', 'webp']} widths={[480, 800]} sizes="340px" alt={r.alt!} loading="lazy" />
+        {refs.filter((r) => r.fotos).map((r) => (
+          <div class:list={['lupa', { 'lupa--doble': r.fotos!.length > 1 }]} data-lupa={r.id} hidden>
+            {r.fotos!.map((f) => (
+              <Picture src={f.src} formats={['avif', 'webp']} widths={[480, 800]} sizes="340px" alt={f.alt} loading="lazy" />
+            ))}
             <span>{r.nombre}</span>
           </div>
         ))}
@@ -75,9 +89,11 @@ const refs: Ref[] = [
                 <span>{r.texto}</span>
               </span>
             </button>
-            {r.foto && (
+            {r.fotos && (
               <div class="leyenda__foto" data-foto={r.id} hidden>
-                <Picture src={r.foto} formats={['avif', 'webp']} widths={[480, 800]} sizes="90vw" alt={r.alt!} loading="lazy" />
+                {r.fotos.map((f) => (
+                  <Picture src={f.src} formats={['avif', 'webp']} widths={[480, 800]} sizes="90vw" alt={f.alt} loading="lazy" />
+                ))}
               </div>
             )}
           </li>
@@ -240,6 +256,14 @@ const refs: Ref[] = [
     }
   }
 
+  .lupa :global(img) + :global(img) {
+    margin-top: 6px;
+  }
+
+  .lupa--doble :global(img) {
+    aspect-ratio: 2 / 1 !important;
+  }
+
   .lupa :global(img) {
     width: 100%;
     aspect-ratio: 3 / 2;
@@ -344,6 +368,10 @@ const refs: Ref[] = [
     animation: lupa 0.35s var(--ease-out);
   }
 
+  .leyenda__foto :global(img) + :global(img) {
+    margin-top: 0.6rem;
+  }
+
   .leyenda__foto :global(img) {
     width: 100%;
     aspect-ratio: 3 / 2;
@@ -360,6 +388,14 @@ const refs: Ref[] = [
   @media (max-width: 999px) {
     .predio__lupa {
       display: none;
+    }
+    /* En el celular las marcas son más chicas para que no se pisen */
+    .marca::before {
+      inset: 10px;
+    }
+    .marca :global(.icon) {
+      width: 13px;
+      height: 13px;
     }
   }
 </style>

@@ -62,6 +62,12 @@ const PICKS = {
   'fuego': [ENERO, 'IMG_5674.jpg'],
   'galeria-noche': [ENERO, 'IMG_5668.jpg'],
   'cometa': [ENERO, 'DSC_5709.jpg'],
+  // referencias del mapa del predio (pedidas por el cliente)
+  'laguna': [dir('1 espacios'), 'DSC_9469.jpg'],
+  'embarcadero-1': [dir('1 espacios'), 'embarcadero 1.jpeg'],
+  'embarcadero-2': [dir('1 espacios'), 'embarcadero 2.jpeg'],
+  'barco-1': [dir('1 espacios'), 'barco 1.jpeg'],
+  'volley-1': [dir('1 espacios'), 'volley 1.jpeg'],
   // destacadas por el cliente
   'juegos-metegol': [ENERO, 'DSC_5601.jpg'],
   'escalera-flores': [ENERO, 'DSC_5619.jpg'],
