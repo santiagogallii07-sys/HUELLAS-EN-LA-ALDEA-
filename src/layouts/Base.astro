@@ -39,7 +39,9 @@ const imagen = new URL('/compartir.jpg', Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href={canonica} />
     {noIndex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href="/terrain/terrain.json" as="fetch" crossorigin />
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
