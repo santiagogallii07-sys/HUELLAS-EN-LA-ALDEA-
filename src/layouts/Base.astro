@@ -39,7 +39,10 @@ const imagen = new URL('/compartir.jpg', Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href={canonica} />
     {noIndex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png" />
+    <link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png" />
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href="/terrain/terrain.json" as="fetch" crossorigin />
@@ -61,6 +64,7 @@ const imagen = new URL('/compartir.jpg', Astro.site);
       geo: { '@type': 'GeoCoordinates', latitude: -32.12166, longitude: -64.33176 },
       url: 'https://huellasenlaaldea.com.ar/',
       image: 'https://huellasenlaaldea.com.ar/compartir.jpg',
+      logo: 'https://huellasenlaaldea.com.ar/icon-512.png',
       sameAs: ['https://www.instagram.com/huellasenlaaldea/'],
     })} />
   </head>
