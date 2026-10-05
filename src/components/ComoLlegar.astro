@@ -19,9 +19,14 @@ import { MAPS } from '../datos';
     <p>
       El complejo está dentro de Rucalhue Aldea Serrana, un barrio cerrado. Cuando reservás, Agustín te pasa el código de ingreso y te explica cómo llegar hasta la cabaña.
     </p>
-    <p>
-      Cerca tenés San Agustín, el lago Piedras Moras en Almafuerte y Embalse, para salir a pasear.
-    </p>
+    <div class="llegar__cerca">
+      <p>Para salir a pasear, en auto:</p>
+      <ul>
+        <li><span>San Agustín</span> <span>20 min</span></li>
+        <li><span>Lago Piedras Moras, Almafuerte</span> <span>20 min</span></li>
+        <li><span>Embalse</span> <span>30 min</span></li>
+      </ul>
+    </div>
     <a class="btn btn--verde" href={MAPS} target="_blank" rel="noopener">
       <Icon name="navigation" /> Abrir en Google Maps
     </a>
@@ -123,6 +128,37 @@ import { MAPS } from '../datos';
     justify-content: center;
     gap: 1.6rem;
     padding: clamp(3rem, 7vw, 6rem) var(--gutter);
+  }
+
+  .llegar__cerca {
+    width: 100%;
+    max-width: 38ch;
+    color: var(--tinta-suave);
+  }
+
+  .llegar__cerca p {
+    margin: 0 0 0.5rem;
+  }
+
+  .llegar__cerca ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .llegar__cerca li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid rgb(0 106 59 / 0.18);
+  }
+
+  .llegar__cerca li span:last-child {
+    font-weight: 600;
+    color: var(--verde);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 
   .llegar__texto > p:not(.lead) {

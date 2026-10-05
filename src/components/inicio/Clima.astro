@@ -1,0 +1,92 @@
+---
+// "Ahora en Las Bajadas": temperatura y cielo en vivo, de Open-Meteo (gratis, sin clave).
+// Si no hay conexión o falla, la línea simplemente no aparece.
+import sun from 'lucide-static/icons/sun.svg?raw';
+import moon from 'lucide-static/icons/moon.svg?raw';
+import cloudSun from 'lucide-static/icons/cloud-sun.svg?raw';
+import cloudMoon from 'lucide-static/icons/cloud-moon.svg?raw';
+import cloud from 'lucide-static/icons/cloud.svg?raw';
+import cloudFog from 'lucide-static/icons/cloud-fog.svg?raw';
+import cloudDrizzle from 'lucide-static/icons/cloud-drizzle.svg?raw';
+import cloudRain from 'lucide-static/icons/cloud-rain.svg?raw';
+import cloudSnow from 'lucide-static/icons/cloud-snow.svg?raw';
+import cloudLightning from 'lucide-static/icons/cloud-lightning.svg?raw';
+
+const iconos = { sun, moon, cloudSun, cloudMoon, cloud, cloudFog, cloudDrizzle, cloudRain, cloudSnow, cloudLightning };
+---
+<p class="clima" data-clima hidden>
+  <span class="clima__icono" aria-hidden="true"></span>
+  <span class="clima__texto"></span>
+</p>
+
+<script is:inline define:vars={{ iconos }}>
+  (() => {
+    const el = document.querySelector('[data-clima]');
+    if (!el) return;
+    // Códigos WMO → texto y par de íconos [día, noche].
+    const cielo = (c) => {
+      if (c === 0) return ['Despejado', 'sun', 'moon'];
+      if (c <= 2) return ['Algo nublado', 'cloudSun', 'cloudMoon'];
+      if (c === 3) return ['Nublado', 'cloud', 'cloud'];
+      if (c <= 48) return ['Neblina', 'cloudFog', 'cloudFog'];
+      if (c <= 57) return ['Llovizna', 'cloudDrizzle', 'cloudDrizzle'];
+      if (c <= 67 || (c >= 80 && c <= 82)) return ['Lluvia', 'cloudRain', 'cloudRain'];
+      if (c <= 77 || c === 85 || c === 86) return ['Nieve', 'cloudSnow', 'cloudSnow'];
+      return ['Tormenta', 'cloudLightning', 'cloudLightning'];
+    };
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=-32.12166&longitude=-64.33176&current=temperature_2m,weather_code,is_day&timezone=America%2FArgentina%2FCordoba';
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 6000);
+    fetch(url, { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => {
+        const a = d.current;
+        if (!a || typeof a.temperature_2m !== 'number') return;
+        const [texto, iDia, iNoche] = cielo(a.weather_code);
+        el.querySelector('.clima__icono').innerHTML = iconos[a.is_day ? iDia : iNoche];
+        el.querySelector('.clima__texto').textContent = `Ahora en Las Bajadas · ${Math.round(a.temperature_2m)}° · ${texto}`;
+        el.hidden = false;
+      })
+      .catch(() => {});
+  })();
+</script>
+
+<style>
+  .clima {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 1.4rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--tinta-suave);
+  }
+
+  .clima[hidden] {
+    display: none;
+  }
+
+  .clima__icono {
+    display: inline-flex;
+    color: var(--naranja-hondo);
+  }
+
+  .clima__icono :global(svg) {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .clima:not([hidden]) {
+      animation: clima-entra 0.5s var(--ease-out) both;
+    }
+  }
+
+  @keyframes clima-entra {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+</style>

@@ -2,6 +2,7 @@
 // Título, bajada y botones del inicio. "oscuro" = texto blanco sobre video; "claro" = texto verde sobre fondo claro.
 import Icon from '../Icon.astro';
 import WhatsApp from '../WhatsApp.astro';
+import Clima from './Clima.astro';
 import { waLink } from '../../datos';
 
 interface Props {
@@ -28,6 +29,7 @@ const titulo = 'La tranquilidad tiene su lugar';
         <Icon name="arrowDown" size={20} /> Conocé el lugar
       </a>
     </div>
+    <Clima />
   </div>
 </div>
 
@@ -93,6 +95,11 @@ const titulo = 'La tranquilidad tiene su lugar';
     min-height: 44px;
     font-weight: 600;
     text-decoration: none;
+  }
+
+  .titulo--oscuro :global(.clima),
+  .titulo--oscuro :global(.clima__icono) {
+    color: var(--blanco);
   }
 
   .titulo--claro .titulo__bajar {
