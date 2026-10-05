@@ -11,7 +11,7 @@ interface Props {
 }
 const {
   title = 'Huellas en la Aldea · Cabañas en Las Bajadas, Calamuchita, Córdoba',
-  description = 'Cabañas a orillas del arroyo Soconcho, en Las Bajadas (Calamuchita, Córdoba). Pileta con jacuzzi, parrilla propia, pet friendly y abierto todo el año. Consultas por WhatsApp.',
+  description = 'Cabañas a orillas del arroyo Soconcho, en Las Bajadas (Calamuchita, Córdoba). Pileta de 27 m con jacuzzi, desayuno incluido, asador propio, pet friendly y abierto todo el año. Consultas por WhatsApp.',
   noIndex = false,
 } = Astro.props;
 const canonica = new URL(Astro.url.pathname, Astro.site);
@@ -54,9 +54,11 @@ const imagen = new URL('/compartir.jpg', Astro.site);
       telephone: '+5493512142137',
       email: 'huellasenlaaldea@gmail.com',
       petsAllowed: true,
+      checkinTime: '14:00',
+      checkoutTime: '10:00',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Rucalhue Aldea Serrana',
+        streetAddress: 'Ruta Provincial 36 km 729, Rucalhue Aldea Serrana',
         addressLocality: 'Las Bajadas',
         addressRegion: 'Córdoba',
         addressCountry: 'AR',

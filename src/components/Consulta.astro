@@ -10,6 +10,11 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
       <p class="lead">
         Las reservas se hacen por WhatsApp con Agustín, que se encarga de la administración. Completá esto y te abrimos el chat con el mensaje listo para enviar.
       </p>
+      <dl class="consulta__datos">
+        <div><dt>Ingreso</dt><dd>desde las 14 h</dd></div>
+        <div><dt>Salida</dt><dd>hasta las 10 h</dd></div>
+        <div><dt>Estadía mínima</dt><dd>1 noche</dd></div>
+      </dl>
       <ul class="consulta__otros">
         <li><a href={waLink()} target="_blank" rel="noopener" data-wa="directo"><WhatsApp size={20} /> {WHATSAPP_VISIBLE}</a></li>
         <li><a href={`mailto:${MAIL}`}><Icon name="mail" size={20} /> {MAIL}</a></li>
@@ -39,7 +44,6 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
             <option value="2" selected>2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5 (con sofá cama)</option>
           </select>
         </div>
         <fieldset class="campo campo--opciones">
@@ -90,6 +94,28 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
 
   .consulta__texto .lead {
     color: rgb(255 255 255 / 0.9);
+  }
+
+  .consulta__datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2rem;
+    margin: 0;
+    padding: 1rem 0;
+    border-block: 1px solid rgb(255 255 255 / 0.25);
+  }
+
+  .consulta__datos dt {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.75);
+  }
+
+  .consulta__datos dd {
+    margin: 0.1rem 0 0;
+    font-weight: 600;
   }
 
   .consulta__otros {

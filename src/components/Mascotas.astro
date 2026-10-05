@@ -34,7 +34,16 @@ const huellas = Array.from({ length: N }, (_, i) => {
     <p class="lead">
       Somos pet friendly: tu mascota viaja con vos y disfruta del lugar tanto como vos. Avisanos cuando consultes así te esperamos a los dos.
     </p>
-    <p class="mascotas__reglas"><em class="a-confirmar">[Reglas para mascotas: a confirmar]</em></p>
+    <div class="mascotas__reglas">
+      <p>Algunas pautas para que todos estemos cómodos:</p>
+      <ul>
+        <li>Cuidá la cabaña de las heces y la orina de tu mascota.</li>
+        <li>No puede meterse en la pileta.</li>
+        <li>No puede dormir en las camas ni en los sillones.</li>
+        <li>Traé su bebedero y su comedero.</li>
+      </ul>
+      <p>Si alguna pauta no se cumple, vamos a hacer una advertencia. ¡Gracias por la comprensión!</p>
+    </div>
   </div>
 </section>
 
@@ -115,6 +124,23 @@ const huellas = Array.from({ length: N }, (_, i) => {
     padding: 0.2rem 0;
     background: var(--verde-papel);
     box-shadow: 0 0 0 0.6rem var(--verde-papel);
+  }
+
+  .mascotas__reglas {
+    display: grid;
+    gap: 0.8rem;
+    max-width: 44ch;
+  }
+
+  .mascotas__reglas p,
+  .mascotas__reglas ul {
+    margin: 0;
+  }
+
+  .mascotas__reglas ul {
+    display: grid;
+    gap: 0.4rem;
+    padding-left: 1.2em;
   }
 
   @media (min-width: 1000px) {

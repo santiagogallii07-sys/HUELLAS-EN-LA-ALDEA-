@@ -1,7 +1,7 @@
 # Huellas en la Aldea — Cabañas
 
 Complejo de 10 cabañas idénticas en Las Bajadas (Calamuchita, Córdoba), a orillas del arroyo Soconcho.
-Pileta de 24 m con jacuzzi, quincho/SUM, cancha, aljibe, botes y pesca. Pet friendly. Abierto todo el año.
+Pileta de 27 m con jacuzzi, desayuno incluido, almacén con proveeduría, quincho/SUM, cancha, aljibe, botes y pesca. Pet friendly. Abierto todo el año.
 
 - Público: familias y parejas (Córdoba, Buenos Aires) que buscan tranquilidad. Lo que más valoran: la tranquilidad.
 - Acción: consultar por WhatsApp (Agustín, administración). Sin precios ni reservas online.
