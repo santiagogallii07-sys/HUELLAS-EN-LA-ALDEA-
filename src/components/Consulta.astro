@@ -326,6 +326,8 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
     ]
       .filter(Boolean)
       .join('\n');
+    // el formulario completo cuenta como "Lead" en el píxel de Meta
+    (window as any).fbq?.('track', 'Lead', { content_name: 'formulario' });
     const url = `https://wa.me/${form.dataset.waNum}?text=${encodeURIComponent(texto)}`;
     const ventana = window.open(url, '_blank', 'noopener');
     if (!ventana) window.location.href = url;
