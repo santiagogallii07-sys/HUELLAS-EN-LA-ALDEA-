@@ -306,6 +306,6 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
     ]
       .filter(Boolean)
       .join('\n');
-    abrirWhatsApp(form.dataset.waNum!, texto, 'formulario');
+    abrirWhatsApp(form.dataset.waNum!, texto, 'formulario', form.querySelector('.form__enviar'));
   });
 </script>

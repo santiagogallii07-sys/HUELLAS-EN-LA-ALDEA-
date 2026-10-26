@@ -151,6 +151,6 @@ import { WHATSAPP } from '../../datos';
     const noches = contarNoches(llegada.value, salida.value);
     const p = personas.value;
     const texto = `¡Hola Agustín! Quería consultar disponibilidad del ${fecha(llegada.value)} al ${fecha(salida.value)} (${noches} ${noches === 1 ? 'noche' : 'noches'}), para ${p} ${p === '1' ? 'persona' : 'personas'}.`;
-    abrirWhatsApp(form.dataset.waNum!, texto, 'reserva-rapida');
+    abrirWhatsApp(form.dataset.waNum!, texto, 'reserva-rapida', form.querySelector('.rapida__enviar'));
   });
 </script>

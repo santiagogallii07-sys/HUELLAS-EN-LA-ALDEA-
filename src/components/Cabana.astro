@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import Foto from './Foto.astro';
 import Icon, { type IconName } from './Icon.astro';
 import frente from '../assets/fotos/cabana-frente.jpg';
 import galeriaParrilla from '../assets/fotos/galeria-parrilla.jpg';
@@ -96,7 +96,7 @@ const datos: { icon: IconName; texto: string }[] = [
 <section class="cabana" id="cabana" aria-labelledby="t-cabana" data-zoom="2">
   <div class="cabana__intro">
     <div class="cabana__frente" data-r="foto">
-      <Picture src={frente} formats={['avif', 'webp']} widths={[800, 1400, 2000]} sizes="(min-width: 1000px) 55vw, 100vw" alt="Cabaña de líneas modernas con galería, cortinas y parque alrededor" loading="lazy" />
+      <Foto src={frente} formats={['avif', 'webp']} widths={[800, 1400, 2000]} sizes="(min-width: 1000px) 55vw, 100vw" alt="Cabaña de líneas modernas con galería, cortinas y parque alrededor" loading="lazy" />
     </div>
     <div class="cabana__texto">
       <h2 id="t-cabana" data-r="sube">Tu cabaña, de punta a punta</h2>
@@ -160,7 +160,7 @@ const datos: { icon: IconName; texto: string }[] = [
           <div class="panel__tira">
             {a.fotos.map((f, j) => (
               <figure class="panel__foto">
-                <Picture src={f.src} formats={['avif', 'webp']} widths={[700, 1100, 1600]} sizes="(min-width: 1000px) 58vw, 92vw" alt={f.alt} loading={i === 0 && j === 0 ? 'eager' : 'lazy'} />
+                <Foto src={f.src} formats={['avif', 'webp']} widths={[700, 1100, 1600]} sizes="(min-width: 1000px) 58vw, 92vw" alt={f.alt} loading={i === 0 && j === 0 ? 'eager' : 'lazy'} />
               </figure>
             ))}
           </div>

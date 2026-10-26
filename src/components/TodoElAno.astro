@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import Foto from './Foto.astro';
 import BotonVideo from './BotonVideo.astro';
 import invierno from '../assets/fotos/invierno-atardecer.jpg';
 import tarde from '../assets/fotos/tarde-dorada.jpg';
@@ -8,7 +8,7 @@ import noche from '../assets/fotos/noche-predio.jpg';
 <section class="anio" id="todo-el-ano" aria-labelledby="t-anio" data-zoom="1">
   <div class="wrap anio__grilla">
     <figure class="a-invierno" data-r="foto">
-      <Picture src={invierno} formats={['avif', 'webp']} widths={[500, 900, 1200]} sizes="(min-width: 1000px) 38vw, 90vw" alt="Atardecer de invierno: un árbol sin hojas se refleja en la pileta" loading="lazy" />
+      <Foto src={invierno} formats={['avif', 'webp']} widths={[500, 900, 1200]} sizes="(min-width: 1000px) 38vw, 90vw" alt="Atardecer de invierno: un árbol sin hojas se refleja en la pileta" loading="lazy" />
       <figcaption>Invierno, al atardecer</figcaption>
     </figure>
     <div class="a-texto" data-r="sube">
@@ -27,11 +27,11 @@ import noche from '../assets/fotos/noche-predio.jpg';
       <figcaption>Verano, en la pileta</figcaption>
     </figure>
     <figure class="a-tarde" data-r="foto">
-      <Picture src={tarde} formats={['avif', 'webp']} widths={[700, 1200, 1600]} sizes="(min-width: 1000px) 55vw, 90vw" alt="Luz dorada de la tarde sobre las sierras; huéspedes descansando junto a la pileta" loading="lazy" />
+      <Foto src={tarde} formats={['avif', 'webp']} widths={[700, 1200, 1600]} sizes="(min-width: 1000px) 55vw, 90vw" alt="Luz dorada de la tarde sobre las sierras; huéspedes descansando junto a la pileta" loading="lazy" />
       <figcaption>Tardes largas, con las sierras de fondo</figcaption>
     </figure>
     <figure class="a-noche" data-r="foto" style="--d:100ms">
-      <Picture src={noche} formats={['avif', 'webp']} widths={[600, 1000]} sizes="(min-width: 1000px) 38vw, 90vw" alt="El predio de noche, con los caminos y la pileta iluminados" loading="lazy" />
+      <Foto src={noche} formats={['avif', 'webp']} widths={[600, 1000]} sizes="(min-width: 1000px) 38vw, 90vw" alt="El predio de noche, con los caminos y la pileta iluminados" loading="lazy" />
       <figcaption>De noche, el predio iluminado</figcaption>
     </figure>
   </div>

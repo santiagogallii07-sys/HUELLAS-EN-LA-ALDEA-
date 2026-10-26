@@ -1,0 +1,21 @@
+---
+// <Picture> con una versión diminuta y borrosa de la misma foto de fondo: mientras carga la real
+// se ve la borrosa (no un hueco). La miniatura va dentro del HTML (~300 bytes), sin pedidos extra.
+import { Picture } from 'astro:assets';
+import type { ComponentProps } from 'astro/types';
+import sharp from 'sharp';
+
+type Props = ComponentProps<typeof Picture>;
+const props = Astro.props;
+
+const cache: Map<string, string> = ((globalThis as any).__miniaturas ??= new Map());
+const ruta = (props.src as any).fsPath as string | undefined;
+let mini = ruta ? cache.get(ruta) : undefined;
+if (ruta && !mini) {
+  const buf = await sharp(ruta).resize(20).blur(1.2).webp({ quality: 40 }).toBuffer();
+  mini = `data:image/webp;base64,${buf.toString('base64')}`;
+  cache.set(ruta, mini);
+}
+const fondo = mini ? `background-image:url(${mini});background-size:cover;background-position:center;` : '';
+---
+<Picture {...props} style={fondo + (props.style ?? '')} />

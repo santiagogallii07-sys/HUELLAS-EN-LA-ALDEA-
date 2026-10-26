@@ -40,8 +40,24 @@ export const revisarFechas = (llegada: HTMLInputElement, salida: HTMLInputElemen
   return '';
 };
 
+const tilde =
+  '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
+/** El botón muestra "Abriendo WhatsApp…" con un tilde y a los segundos vuelve a ser el de antes */
+const avisarEnBoton = (boton: HTMLElement | null) => {
+  if (!boton || boton.classList.contains('enviado')) return;
+  const antes = boton.innerHTML;
+  boton.classList.add('enviado');
+  boton.innerHTML = `${tilde} Abriendo WhatsApp…`;
+  setTimeout(() => {
+    boton.classList.remove('enviado');
+    boton.innerHTML = antes;
+  }, 3500);
+};
+
 /** Abre el chat con el mensaje listo y le avisa al píxel de Meta que fue una consulta completa */
-export const abrirWhatsApp = (numero: string, texto: string, origen: string) => {
+export const abrirWhatsApp = (numero: string, texto: string, origen: string, boton?: HTMLElement | null) => {
+  avisarEnBoton(boton ?? null);
   window.fbq?.('track', 'Lead', { content_name: origen });
   // Un enlace en vez de window.open: con "noopener", window.open devuelve null aunque abra la pestaña
   const a = document.createElement('a');

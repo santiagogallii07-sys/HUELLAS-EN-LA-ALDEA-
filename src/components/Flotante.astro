@@ -87,6 +87,33 @@ import { waLink } from '../datos';
     }
   }
 
+  /* Saludo: una sola vez, a los 20 s, se despliega "Escribinos" y el ícono se mueve */
+  .flotante.saluda .flotante__texto {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .flotante.saluda .flotante__texto > span {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .flotante.saluda :global(.icon) {
+      animation: saludo 0.9s var(--ease-out) 0.2s;
+    }
+  }
+
+  @keyframes saludo {
+    20% {
+      rotate: -14deg;
+    }
+    45% {
+      rotate: 12deg;
+    }
+    70% {
+      rotate: -6deg;
+    }
+  }
+
   @keyframes flotante {
     from {
       opacity: 0;
@@ -94,3 +121,21 @@ import { waLink } from '../datos';
     }
   }
 </style>
+
+<script>
+  // Saluda una sola vez por visita, a los 20 segundos
+  const boton = document.querySelector<HTMLElement>('.flotante')!;
+  let yaSaludo = false;
+  try {
+    yaSaludo = sessionStorage.getItem('huellas-saludo') === '1';
+  } catch {}
+  if (!yaSaludo) {
+    setTimeout(() => {
+      boton.classList.add('saluda');
+      try {
+        sessionStorage.setItem('huellas-saludo', '1');
+      } catch {}
+      setTimeout(() => boton.classList.remove('saluda'), 4000);
+    }, 20000);
+  }
+</script>

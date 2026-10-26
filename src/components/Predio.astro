@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import Foto from './Foto.astro';
 import Icon, { type IconName } from './Icon.astro';
 import cenital from '../assets/fotos/complejo-cenital.jpg';
 import pileta from '../assets/fotos/pileta-dia.jpg';
@@ -49,6 +49,7 @@ const refs: Ref[] = [
   { id: 'aljibe', icon: 'stone', corto: 'Aljibe', nombre: 'Aljibe y muros de piedra', texto: 'Piedra trabajada a mano en los espacios comunes.', pos: [54.8, 36.4], fotos: [{ src: aljibe, alt: 'Aljibe de piedra con faroles y escalera' }] },
 ];
 const corto = (r: Ref) => r.corto ?? r.nombre;
+
 ---
 <section class="predio" id="predio" aria-labelledby="t-predio" data-zoom="1">
   <div class="wrap predio__cabeza">
@@ -60,7 +61,7 @@ const corto = (r: Ref) => r.corto ?? r.nombre;
 
   <div class="predio__mapa">
     <figure class="predio__foto" data-r="foto">
-      <Picture src={cenital} formats={['avif', 'webp']} widths={[800, 1400, 2000]} sizes="(min-width: 1000px) 66vw, 100vw" alt="Vista aérea del predio: el arroyo rodea las cabañas y la pileta" loading="lazy" />
+      <Foto src={cenital} formats={['avif', 'webp']} widths={[800, 1400, 2000]} sizes="(min-width: 1000px) 66vw, 100vw" alt="Vista aérea del predio: el arroyo rodea las cabañas y la pileta" loading="lazy" />
       {refs.filter((r) => r.pos).map((r, i) => (
         <button
           type="button"
@@ -99,7 +100,7 @@ const corto = (r: Ref) => r.corto ?? r.nombre;
               <div class="ficha__fotos">
                 <div class="ficha__tira">
                   {r.fotos.map((f) => (
-                    <Picture src={f.src} formats={['avif', 'webp']} widths={[480, 800]} sizes="(min-width: 1000px) 400px, 100vw" alt={f.alt} loading="lazy" />
+                    <Foto src={f.src} formats={['avif', 'webp']} widths={[480, 800]} sizes="(min-width: 1000px) 400px, 100vw" alt={f.alt} loading="lazy" />
                   ))}
                 </div>
                 {r.fotos.length > 1 && (

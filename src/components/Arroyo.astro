@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import Foto from './Foto.astro';
 import BotonVideo from './BotonVideo.astro';
 import paseo from '../assets/fotos/arroyo-paseo.jpg';
 import dique from '../assets/fotos/dique-aereo.jpg';
@@ -17,7 +17,7 @@ import caminata from '../assets/fotos/caminata.jpg';
         </p>
       </div>
       <figure class="arroyo__foto" data-r="foto" style="--d:80ms">
-        <Picture src={paseo} formats={['avif', 'webp']} widths={[700, 1200, 1800]} sizes="(min-width: 1000px) 62vw, 92vw" alt="Dos personas caminando por el paseo de piedra del dique, con el agua cayendo" loading="lazy" />
+        <Foto src={paseo} formats={['avif', 'webp']} widths={[700, 1200, 1800]} sizes="(min-width: 1000px) 62vw, 92vw" alt="Dos personas caminando por el paseo de piedra del dique, con el agua cayendo" loading="lazy" />
       </figure>
     </div>
     <div class="mosaico">
@@ -31,19 +31,19 @@ import caminata from '../assets/fotos/caminata.jpg';
         <figcaption>El Soconcho al atardecer, desde el drone</figcaption>
       </figure>
       <figure class="m-escalera" data-r="foto" style="--d:90ms">
-        <Picture src={escalera} formats={['avif', 'webp']} widths={[500, 900]} sizes="(min-width: 1000px) 30vw, 45vw" alt="Flores rosadas junto a una escalera de piedra que baja al arroyo" loading="lazy" />
+        <Foto src={escalera} formats={['avif', 'webp']} widths={[500, 900]} sizes="(min-width: 1000px) 30vw, 45vw" alt="Flores rosadas junto a una escalera de piedra que baja al arroyo" loading="lazy" />
         <figcaption>Escalones al agua, entre flores</figcaption>
       </figure>
       <figure class="m-dique" data-r="foto">
-        <Picture src={dique} formats={['avif', 'webp']} widths={[700, 1200]} sizes="(min-width: 1000px) 40vw, 90vw" alt="El dique de piedra y el remanso del arroyo, vistos desde el drone" loading="lazy" />
+        <Foto src={dique} formats={['avif', 'webp']} widths={[700, 1200]} sizes="(min-width: 1000px) 40vw, 90vw" alt="El dique de piedra y el remanso del arroyo, vistos desde el drone" loading="lazy" />
         <figcaption>El dique, desde el aire</figcaption>
       </figure>
       <figure class="m-caminata" data-r="foto" style="--d:90ms">
-        <Picture src={caminata} formats={['avif', 'webp']} widths={[500, 900]} sizes="(min-width: 1000px) 30vw, 90vw" alt="Pareja caminando entre algarrobos" loading="lazy" />
+        <Foto src={caminata} formats={['avif', 'webp']} widths={[500, 900]} sizes="(min-width: 1000px) 30vw, 90vw" alt="Pareja caminando entre algarrobos" loading="lazy" />
         <figcaption>Caminatas entre algarrobos</figcaption>
       </figure>
       <figure class="m-pato" data-r="foto" style="--d:180ms">
-        <Picture src={pato} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 1000px) 22vw, 45vw" alt="Pato nadando en el arroyo" loading="lazy" />
+        <Foto src={pato} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 1000px) 22vw, 45vw" alt="Pato nadando en el arroyo" loading="lazy" />
         <figcaption>Vecinos del arroyo</figcaption>
       </figure>
     </div>

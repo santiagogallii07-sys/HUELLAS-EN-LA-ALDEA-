@@ -287,3 +287,65 @@ section[id] {
     transform: scale(1.1);
   }
 }
+
+/* Títulos de sección: las palabras suben de a una (las arma revelar.ts) */
+.r-pal {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.2em;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+  vertical-align: top;
+}
+
+.r-pal > span {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-r='palabras']:not(.visto) .r-pal > span {
+    transform: translateY(105%);
+  }
+
+  html.js [data-r='palabras'].visto .r-pal > span {
+    animation: r-palabra 0.7s var(--ease-out) calc(var(--d, 0ms) + var(--i) * 45ms) backwards;
+  }
+}
+
+@keyframes r-palabra {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+/* Fotos: zoom muy leve al pasar el mouse (no en el mapa, para no correr las marcas) */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  figure[data-r='foto']:not(.predio__foto) {
+    overflow: clip;
+    border-radius: 14px;
+  }
+
+  figure[data-r='foto'] img,
+  .ficha__tira img {
+    transition: scale 0.9s var(--ease-out);
+  }
+
+  figure[data-r='foto']:not(.predio__foto):hover img,
+  .ficha__tira:hover img {
+    scale: 1.035;
+  }
+}
+
+/* Botón de formulario después de enviar: "Abriendo WhatsApp…" */
+.btn.enviado {
+  --bg: var(--verde-hondo);
+  --fg: var(--blanco);
+  pointer-events: none;
+  animation: enviado 0.45s var(--ease-out);
+}
+
+@keyframes enviado {
+  40% {
+    transform: scale(0.96);
+  }
+}

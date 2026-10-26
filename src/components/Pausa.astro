@@ -1,11 +1,11 @@
 ---
 // Respiro entre el predio y la cabaña: la foto del atardecer entera (3:2), sin recortes.
-import { Picture } from 'astro:assets';
+import Foto from './Foto.astro';
 import ocaso from '../assets/fotos/pileta-ocaso.jpg';
 ---
 <section class="pausa" aria-label="Atardecer en la pileta" data-zoom="1">
   <figure class="wrap pausa__foto" data-r="foto">
-    <Picture src={ocaso} formats={['avif', 'webp']} widths={[800, 1400, 2000, 2400]} sizes="(min-width: 1400px) 1320px, 94vw" alt="Atardecer con nubes doradas sobre la pileta; una chica camina por el borde" loading="lazy" />
+    <Foto src={ocaso} formats={['avif', 'webp']} widths={[800, 1400, 2000, 2400]} sizes="(min-width: 1400px) 1320px, 94vw" alt="Atardecer con nubes doradas sobre la pileta; una chica camina por el borde" loading="lazy" />
     <figcaption>Atardecer en la pileta</figcaption>
   </figure>
 </section>
