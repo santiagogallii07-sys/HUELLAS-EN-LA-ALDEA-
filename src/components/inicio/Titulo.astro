@@ -1,9 +1,8 @@
 ---
 // Título, bajada y botones del inicio. "oscuro" = texto blanco sobre video; "claro" = texto verde sobre fondo claro.
 import Icon from '../Icon.astro';
-import WhatsApp from '../WhatsApp.astro';
 import Clima from './Clima.astro';
-import { waLink } from '../../datos';
+import Rapida from './Rapida.astro';
 
 interface Props {
   tono?: 'oscuro' | 'claro';
@@ -21,10 +20,8 @@ const titulo = 'La tranquilidad tiene su lugar';
     <p class="titulo__bajada">
       Cabañas a orillas del arroyo Soconcho, en Las Bajadas, Calamuchita. Monte, sierras y silencio. Vení a desconectarte.
     </p>
+    <Rapida />
     <div class="titulo__acciones">
-      <a class="btn" href={waLink()} target="_blank" rel="noopener" data-wa="inicio">
-        <WhatsApp /> Consultá por WhatsApp
-      </a>
       <a class="titulo__bajar" href="#predio">
         <Icon name="arrowDown" size={20} /> Conocé el lugar
       </a>
@@ -80,12 +77,16 @@ const titulo = 'La tranquilidad tiene su lugar';
     color: var(--tinta-suave);
   }
 
+  .titulo__resto :global(.rapida) {
+    margin-top: 1.5rem;
+  }
+
   .titulo__acciones {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem 1.6rem;
-    margin-top: 1.7rem;
+    margin-top: 0.6rem;
   }
 
   .titulo__bajar {
@@ -116,13 +117,6 @@ const titulo = 'La tranquilidad tiene su lugar';
     }
   }
 
-  @media (max-width: 760px) {
-    .titulo__acciones .btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-
   /* Entrada corta: palabras que suben, después la bajada y los botones */
   @media (prefers-reduced-motion: no-preference) {
     :global(html.js) .pal > span {
@@ -130,14 +124,18 @@ const titulo = 'La tranquilidad tiene su lugar';
       animation-delay: calc(var(--retraso, 0.2s) + var(--i) * 45ms);
     }
     :global(html.js) .titulo__bajada,
+    :global(html.js) .titulo__resto :global(.rapida),
     :global(html.js) .titulo__acciones {
       animation: aparecer 0.5s var(--ease-out) both;
     }
     :global(html.js) .titulo__bajada {
       animation-delay: calc(var(--retraso, 0.2s) + 0.25s);
     }
-    :global(html.js) .titulo__acciones {
+    :global(html.js) .titulo__resto :global(.rapida) {
       animation-delay: calc(var(--retraso, 0.2s) + 0.35s);
+    }
+    :global(html.js) .titulo__acciones {
+      animation-delay: calc(var(--retraso, 0.2s) + 0.45s);
     }
   }
 

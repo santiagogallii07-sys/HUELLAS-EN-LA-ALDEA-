@@ -270,42 +270,22 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
 </style>
 
 <script>
+  import { abrirWhatsApp, contarNoches, enlazarFechas, fecha, revisarFechas } from '../scripts/whatsapp';
+
   const form = document.querySelector<HTMLFormElement>('.consulta .form')!;
   const error = form.querySelector<HTMLElement>('.form__error')!;
   const llegada = form.querySelector<HTMLInputElement>('#f-llegada')!;
   const salida = form.querySelector<HTMLInputElement>('#f-salida')!;
-
-  const hoy = new Date();
-  const iso = (d: Date) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-  llegada.min = iso(hoy);
-  llegada.addEventListener('change', () => {
-    if (llegada.value) {
-      const d = new Date(llegada.value + 'T12:00');
-      d.setDate(d.getDate() + 1);
-      salida.min = iso(d);
-      if (!salida.value || salida.value <= llegada.value) salida.value = iso(new Date(d.getTime() + 86400000));
-    }
-  });
-
-  const fecha = (v: string) => {
-    const [a, m, d] = v.split('-');
-    return `${d}/${m}/${a}`;
-  };
-
-  const marcar = (el: HTMLElement, mal: boolean) => el.setAttribute('aria-invalid', String(mal));
+  enlazarFechas(llegada, salida);
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const datos = new FormData(form);
     const nombre = String(datos.get('nombre') || '').trim();
     const nombreEl = form.querySelector<HTMLInputElement>('#f-nombre')!;
-    let problema = '';
-    marcar(nombreEl, !nombre);
-    marcar(llegada, !llegada.value);
-    marcar(salida, !salida.value || salida.value <= llegada.value);
-    if (!nombre) problema = 'Contanos tu nombre así Agustín sabe con quién habla.';
-    else if (!llegada.value || !salida.value) problema = 'Elegí las fechas de llegada y salida.';
-    else if (salida.value <= llegada.value) problema = 'La salida tiene que ser después de la llegada.';
+    nombreEl.setAttribute('aria-invalid', String(!nombre));
+    const problemaFechas = revisarFechas(llegada, salida);
+    const problema = nombre ? problemaFechas : 'Contanos tu nombre así Agustín sabe con quién habla.';
 
     if (problema) {
       error.textContent = problema;
@@ -315,7 +295,7 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
     }
     error.hidden = true;
 
-    const noches = Math.round((+new Date(salida.value) - +new Date(llegada.value)) / 86400000);
+    const noches = contarNoches(llegada.value, salida.value);
     const personas = String(datos.get('personas'));
     const mascota = datos.get('mascota') === 'si';
     const extra = String(datos.get('mensaje') || '').trim();
@@ -326,10 +306,6 @@ import { MAIL, WHATSAPP, WHATSAPP_VISIBLE, waLink } from '../datos';
     ]
       .filter(Boolean)
       .join('\n');
-    // el formulario completo cuenta como "Lead" en el píxel de Meta
-    (window as any).fbq?.('track', 'Lead', { content_name: 'formulario' });
-    const url = `https://wa.me/${form.dataset.waNum}?text=${encodeURIComponent(texto)}`;
-    const ventana = window.open(url, '_blank', 'noopener');
-    if (!ventana) window.location.href = url;
+    abrirWhatsApp(form.dataset.waNum!, texto, 'formulario');
   });
 </script>

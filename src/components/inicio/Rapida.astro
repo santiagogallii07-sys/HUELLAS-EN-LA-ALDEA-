@@ -1,0 +1,156 @@
+---
+// Consulta rápida del inicio: fechas y personas, y abre WhatsApp con el mensaje listo.
+// El formulario completo (con nombre y mascota) sigue al final de la página.
+import WhatsApp from '../WhatsApp.astro';
+import { WHATSAPP } from '../../datos';
+---
+<form class="rapida" data-wa-num={WHATSAPP} novalidate aria-labelledby="rapida-titulo">
+  <p class="rapida__titulo" id="rapida-titulo">Consultá disponibilidad</p>
+  <div class="rapida__campos">
+    <div class="rapida__campo">
+      <label for="r-llegada">Llegada</label>
+      <input id="r-llegada" name="llegada" type="date" required />
+    </div>
+    <div class="rapida__campo">
+      <label for="r-salida">Salida</label>
+      <input id="r-salida" name="salida" type="date" required />
+    </div>
+    <div class="rapida__campo rapida__campo--personas">
+      <label for="r-personas">Personas</label>
+      <select id="r-personas" name="personas">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+    <button class="btn rapida__enviar" type="submit">
+      <WhatsApp /> Consultar
+    </button>
+  </div>
+  <p class="rapida__error" role="alert" hidden></p>
+</form>
+
+<style>
+  .rapida {
+    container-type: inline-size;
+    padding: 0.9rem;
+    border-radius: 16px;
+    background: var(--blanco);
+    box-shadow:
+      0 0 0 1px var(--linea),
+      0 20px 40px -28px rgb(7 42 25 / 0.5);
+  }
+
+  .rapida__titulo {
+    margin: 0 0 0.6rem 0.15rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--verde);
+  }
+
+  /* Angosto (celular): fechas arriba, personas y botón abajo */
+  .rapida__campos {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.6rem;
+    align-items: end;
+  }
+
+  /* Ancho: todo en una fila */
+  @container (min-width: 500px) {
+    .rapida__campos {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 4.1rem auto;
+    }
+  }
+
+  .rapida__campo {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .rapida__campo label {
+    padding-left: 0.15rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--tinta-suave);
+  }
+
+  .rapida input,
+  .rapida select {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0.55rem 0.5rem;
+    border: 1.5px solid #9fb2a4;
+    border-radius: 10px;
+    background: var(--verde-claro);
+    color: var(--tinta);
+    /* 16 px: con menos, el iPhone agranda la página al tocar el campo */
+    font: 600 1rem/1.3 var(--f-texto);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
+  }
+
+  .rapida input:focus,
+  .rapida select:focus {
+    outline: none;
+    border-color: var(--verde);
+    background: var(--blanco);
+    box-shadow: 0 0 0 3px rgb(0 106 59 / 0.2);
+  }
+
+  .rapida [aria-invalid='true'] {
+    border-color: #b42318;
+  }
+
+  .rapida__enviar {
+    justify-content: center;
+    min-height: 48px;
+    padding-inline: 0.9em;
+    white-space: nowrap;
+  }
+
+  .rapida__error {
+    margin-top: 0.6rem;
+    padding: 0.55rem 0.8rem;
+    border-radius: 8px;
+    background: #fde8e6;
+    color: #8a1c12;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  import { abrirWhatsApp, contarNoches, enlazarFechas, fecha, revisarFechas } from '../../scripts/whatsapp';
+
+  const form = document.querySelector<HTMLFormElement>('.rapida')!;
+  const error = form.querySelector<HTMLElement>('.rapida__error')!;
+  const llegada = form.querySelector<HTMLInputElement>('#r-llegada')!;
+  const salida = form.querySelector<HTMLInputElement>('#r-salida')!;
+  const personas = form.querySelector<HTMLSelectElement>('#r-personas')!;
+  enlazarFechas(llegada, salida);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const problema = revisarFechas(llegada, salida);
+    if (problema) {
+      error.textContent = problema;
+      error.hidden = false;
+      form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+      return;
+    }
+    error.hidden = true;
+    const noches = contarNoches(llegada.value, salida.value);
+    const p = personas.value;
+    const texto = `¡Hola Agustín! Quería consultar disponibilidad del ${fecha(llegada.value)} al ${fecha(salida.value)} (${noches} ${noches === 1 ? 'noche' : 'noches'}), para ${p} ${p === '1' ? 'persona' : 'personas'}.`;
+    abrirWhatsApp(form.dataset.waNum!, texto, 'reserva-rapida');
+  });
+</script>

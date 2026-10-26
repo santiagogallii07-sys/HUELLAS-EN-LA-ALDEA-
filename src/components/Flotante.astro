@@ -1,0 +1,96 @@
+---
+// Botón de WhatsApp siempre a mano, abajo a la derecha.
+import WhatsApp from './WhatsApp.astro';
+import { waLink } from '../datos';
+---
+<a class="flotante" href={waLink()} target="_blank" rel="noopener" data-wa="flotante" aria-label="Escribinos por WhatsApp">
+  <WhatsApp size={28} />
+  <span class="flotante__texto" aria-hidden="true"><span>Escribinos</span></span>
+</a>
+
+<style>
+  .flotante {
+    position: fixed;
+    right: calc(1rem + env(safe-area-inset-right));
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    height: 58px;
+    min-width: 58px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: var(--naranja);
+    color: var(--verde-noche);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow:
+      0 0 0 2px rgb(255 255 255 / 0.9),
+      0 12px 28px -10px rgb(7 42 25 / 0.7);
+    transition:
+      transform 0.4s var(--ease-out),
+      box-shadow 0.4s var(--ease-out);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .flotante :global(.icon) {
+    flex: none;
+  }
+
+  /* El texto se despliega al pasar el mouse (en el celular queda solo el ícono) */
+  .flotante__texto {
+    display: grid;
+    grid-template-columns: minmax(0, 0fr);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: grid-template-columns 0.4s var(--ease-out);
+  }
+
+  .flotante__texto > span {
+    min-width: 0;
+    padding: 0 0.15rem 0 0.55rem;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  @media (hover: hover) {
+    .flotante:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 2px rgb(255 255 255 / 0.9),
+        0 16px 32px -10px rgb(7 42 25 / 0.75);
+    }
+    .flotante:hover .flotante__texto {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .flotante:hover .flotante__texto > span {
+      opacity: 1;
+    }
+  }
+
+  .flotante:active {
+    transform: scale(0.95);
+  }
+
+  @media (min-width: 900px) {
+    .flotante {
+      right: calc(1.5rem + env(safe-area-inset-right));
+      bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Entra apenas carga la página, después del título */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .flotante {
+      animation: flotante 0.5s var(--ease-out) 0.9s backwards;
+    }
+  }
+
+  @keyframes flotante {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.8);
+    }
+  }
+</style>
