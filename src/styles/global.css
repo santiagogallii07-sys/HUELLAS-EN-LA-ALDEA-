@@ -238,7 +238,7 @@ p {
 }
 
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 5rem;
 }
 
 /* Apariciones cortas al entrar en pantalla (solo con JS y sin "reducir movimiento").

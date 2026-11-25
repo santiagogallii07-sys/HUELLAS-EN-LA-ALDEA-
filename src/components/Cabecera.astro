@@ -65,7 +65,7 @@ const niveles = [
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    height: 4.5rem;
+    height: calc(5rem + env(safe-area-inset-top));
     padding: 0 var(--gutter);
     padding-top: env(safe-area-inset-top);
     color: var(--blanco);
@@ -84,6 +84,21 @@ const niveles = [
     background: transparent;
   }
 
+  /* Sobre el video: una sombra suave arriba para que el logo y el menú se lean */
+  .cab::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 -2.5rem;
+    z-index: -1;
+    background: linear-gradient(rgb(7 42 25 / 0.6), rgb(7 42 25 / 0.25) 60%, transparent);
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+
+  .cab[data-modo='claro']::before {
+    opacity: 0;
+  }
+
   .cab[data-modo='claro'] {
     --logo-a: var(--verde);
     --logo-b: var(--naranja);
@@ -100,15 +115,15 @@ const niveles = [
     }
   }
 
+  /* El logo se mide por el alto, así entra entero en la franja (antes se cortaban las montañas) */
   .cab__logo {
     display: block;
-    width: 112px;
     flex: none;
   }
 
   .cab__logo :global(.logo) {
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 62px;
   }
 
   .cab__nav {
@@ -228,12 +243,14 @@ const niveles = [
 
   @media (max-width: 899px) {
     .cab {
-      height: 4rem;
+      height: calc(4.25rem + env(safe-area-inset-top));
       gap: 0.75rem;
     }
     .cab__logo {
-      width: 92px;
       margin-right: auto;
+    }
+    .cab__logo :global(.logo) {
+      height: 52px;
     }
     .cab__nav {
       display: none;

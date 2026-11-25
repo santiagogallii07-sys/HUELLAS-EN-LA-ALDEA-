@@ -3,123 +3,234 @@ import Foto from './Foto.astro';
 import perroAtardecer from '../assets/fotos/perro-atardecer.jpg';
 import perroManta from '../assets/fotos/perro-manta.jpg';
 
-// Rastro de huellas, calculado al compilar: en computadora sube por la columna izquierda,
-// en el celular cruza la franja de arriba. Nunca pasa por encima del texto.
-const N = 14;
+// Rastro de huellas que cruza las fotos en diagonal, de abajo a la izquierda hacia arriba a la derecha.
+// Las posiciones son porcentajes del collage (proporción 5:4), calculadas al compilar.
+const N = 12;
 const huellas = Array.from({ length: N }, (_, i) => {
   const t = i / (N - 1);
-  const xd = 5 + 26 * t + 3 * Math.sin(2 * Math.PI * t);
-  const yd = 90 - 80 * t;
-  const ad = (Math.atan2(-80 * 7, (26 + 6 * Math.PI * Math.cos(2 * Math.PI * t)) * 14.4) * 180) / Math.PI + 90;
-  const xm = -3 + 106 * t;
-  const ym = 7 + 3 * Math.sin(2 * Math.PI * t);
-  const am = (Math.atan2(6 * Math.PI * Math.cos(2 * Math.PI * t) * 6, 106 * 3.9) * 180) / Math.PI + 90;
-  return { xd, yd, ad, xm, ym, am, lado: i % 2 === 0 ? -1 : 1, i };
+  const x = 3 + 94 * t;
+  const y = 95 - 90 * t + 6 * Math.sin(2 * Math.PI * t);
+  const dx = 94 * 5;
+  const dy = (-90 + 12 * Math.PI * Math.cos(2 * Math.PI * t)) * 4;
+  const a = (Math.atan2(dy, dx) * 180) / Math.PI + 90;
+  return { x, y, a, lado: i % 2 === 0 ? -1 : 1, i };
 });
 ---
 <section class="mascotas" id="mascotas" aria-labelledby="t-mascotas" data-zoom="1">
-  <div class="rastro" aria-hidden="true">
-    {huellas.map((h) => (
-      <svg
-        class="huella"
-        viewBox="0 0 40 40"
-        style={`--xd:${h.xd.toFixed(2)}%;--yd:${h.yd.toFixed(2)}%;--ad:${h.ad.toFixed(1)}deg;--xm:${h.xm.toFixed(2)}%;--ym:${h.ym.toFixed(2)}%;--am:${h.am.toFixed(1)}deg;--l:${h.lado};--i:${h.i}`}
-      >
-        <path d="M20 19c-5.4 0-10 6.6-10 10.6 0 3 2.3 4.4 5 4.4 2.2 0 3.2-1 5-1s2.8 1 5 1c2.7 0 5-1.4 5-4.4 0-4-4.6-10.6-10-10.6Z" />
-        <ellipse cx="9.5" cy="16.5" rx="3.2" ry="4.2" transform="rotate(-28 9.5 16.5)" />
-        <ellipse cx="15.6" cy="9.8" rx="3.2" ry="4.4" transform="rotate(-8 15.6 9.8)" />
-        <ellipse cx="24.4" cy="9.8" rx="3.2" ry="4.4" transform="rotate(8 24.4 9.8)" />
-        <ellipse cx="30.5" cy="16.5" rx="3.2" ry="4.2" transform="rotate(28 30.5 16.5)" />
-      </svg>
-    ))}
-  </div>
-  <div class="wrap mascotas__texto" data-r="grupo">
-    <h2 id="t-mascotas">Tu perro también deja huellas</h2>
-    <p class="lead">
-      Somos pet friendly: tu mascota viaja con vos y disfruta del lugar tanto como vos. Avisanos cuando consultes así te esperamos a los dos.
-    </p>
-    <div class="mascotas__reglas">
-      <p>Algunas pautas para que todos estemos cómodos:</p>
-      <ul>
-        <li>Cuidá la cabaña de las heces y la orina de tu mascota.</li>
-        <li>No puede meterse en la pileta.</li>
-        <li>No puede dormir en las camas ni en los sillones.</li>
-        <li>Traé su bebedero y su comedero.</li>
-      </ul>
-      <p>Si alguna pauta no se cumple, vamos a hacer una advertencia. ¡Gracias por la comprensión!</p>
-    </div>
-    <div class="mascotas__fotos">
-      <figure class="m-atardecer" data-r="foto">
-        <Foto src={perroAtardecer} formats={['avif', 'webp']} widths={[500, 900, 1400]} sizes="(min-width: 1000px) 34vw, 60vw" alt="Un chihuahua en el pasto del complejo, con el atardecer naranja detrás de los árboles" loading="lazy" />
+  <div class="wrap mascotas__grilla">
+    <div class="collage">
+      <figure class="polaroid polaroid--atardecer">
+        <Foto src={perroAtardecer} formats={['avif', 'webp']} widths={[500, 900, 1400]} sizes="(min-width: 1000px) 34vw, 70vw" alt="Un chihuahua en el pasto del complejo, con el atardecer naranja detrás de los árboles" loading="lazy" />
       </figure>
-      <figure class="m-manta" data-r="foto" style="--d:100ms">
+      <figure class="polaroid polaroid--manta">
         <Foto src={perroManta} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 1000px) 20vw, 40vw" alt="Una chica acostada sobre una manta en el pasto juega con su perrita" loading="lazy" />
       </figure>
+      <div class="rastro" aria-hidden="true">
+        {huellas.map((h) => (
+          <span class="huella" style={`--x:${h.x.toFixed(2)}%;--y:${h.y.toFixed(2)}%;--a:${h.a.toFixed(1)}deg;--l:${h.lado};--i:${h.i}`}>
+            <svg viewBox="0 0 40 40">
+              <path d="M20 19c-5.4 0-10 6.6-10 10.6 0 3 2.3 4.4 5 4.4 2.2 0 3.2-1 5-1s2.8 1 5 1c2.7 0 5-1.4 5-4.4 0-4-4.6-10.6-10-10.6Z" />
+              <ellipse cx="9.5" cy="16.5" rx="3.2" ry="4.2" transform="rotate(-28 9.5 16.5)" />
+              <ellipse cx="15.6" cy="9.8" rx="3.2" ry="4.4" transform="rotate(-8 15.6 9.8)" />
+              <ellipse cx="24.4" cy="9.8" rx="3.2" ry="4.4" transform="rotate(8 24.4 9.8)" />
+              <ellipse cx="30.5" cy="16.5" rx="3.2" ry="4.2" transform="rotate(28 30.5 16.5)" />
+            </svg>
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <div class="mascotas__texto" data-r="grupo">
+      <h2 id="t-mascotas">Tu perro también deja huellas</h2>
+      <p class="lead">
+        Somos pet friendly: tu mascota viaja con vos y disfruta del lugar tanto como vos. Avisanos cuando consultes así te esperamos a los dos.
+      </p>
+      <div class="mascotas__reglas">
+        <p>Algunas pautas para que todos estemos cómodos:</p>
+        <ul>
+          <li>Cuidá la cabaña de las heces y la orina de tu mascota.</li>
+          <li>No puede meterse en la pileta.</li>
+          <li>No puede dormir en las camas ni en los sillones.</li>
+          <li>Traé su bebedero y su comedero.</li>
+        </ul>
+        <p>Si alguna pauta no se cumple, vamos a hacer una advertencia. ¡Gracias por la comprensión!</p>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .mascotas {
-    position: relative;
     overflow: hidden;
-    padding-block: clamp(7rem, 14vw, 12rem);
+    padding-block: clamp(5rem, 10vw, 8rem);
     background: var(--verde-papel);
   }
 
+  .mascotas__grilla {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 1000px) {
+    .mascotas__grilla {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  /* Collage: dos fotos tipo polaroid, apenas inclinadas */
+  .collage {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    width: min(100%, 36rem);
+    justify-self: center;
+  }
+
+  .polaroid {
+    position: absolute;
+    margin: 0;
+    padding: clamp(6px, 1vw, 10px);
+    padding-bottom: clamp(18px, 3vw, 30px);
+    background: var(--blanco);
+    border-radius: 6px;
+    box-shadow: 0 24px 44px -24px rgb(7 42 25 / 0.55);
+    rotate: var(--rot);
+  }
+
+  .polaroid :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+  }
+
+  .polaroid--atardecer {
+    --rot: -4deg;
+    left: 0;
+    top: 2%;
+    width: 70%;
+  }
+
+  .polaroid--manta {
+    --rot: 5deg;
+    right: 1%;
+    bottom: 0;
+    width: 40%;
+  }
+
+  /* Huellas: pasan por encima de las fotos, con borde blanco para que se lean sobre la imagen */
   .rastro {
     position: absolute;
     inset: 0;
+    z-index: 2;
     pointer-events: none;
   }
 
   .huella {
-    --a: var(--am);
     position: absolute;
-    left: var(--xm);
-    top: var(--ym);
-    width: clamp(26px, 3.2vw, 44px);
-    height: auto;
-    fill: var(--naranja);
-    transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--l) * 60%));
+    left: var(--x);
+    top: var(--y);
+    width: clamp(24px, 2.8vw, 36px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--l) * 55%));
   }
 
-  @media (min-width: 1000px) {
-    .huella {
-      --a: var(--ad);
-      left: var(--xd);
-      top: var(--yd);
+  .huella svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: var(--naranja);
+    stroke: var(--blanco);
+    stroke-width: 2.5px;
+    paint-order: stroke;
+    filter: drop-shadow(0 2px 3px rgb(7 42 25 / 0.45));
+  }
+
+  /* Onda de "pisada" alrededor de cada huella */
+  .huella::after {
+    content: '';
+    position: absolute;
+    inset: -30%;
+    border: 2px solid var(--naranja);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  /* Entrada: las fotos caen sobre la mesa y después un perro camina por encima */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .mascotas:not(.caminando) .polaroid,
+    :global(html.js) .mascotas:not(.caminando) .huella {
+      opacity: 0;
+    }
+
+    .mascotas.caminando .polaroid {
+      animation: caer 0.8s var(--ease-out) backwards;
+    }
+
+    .mascotas.caminando .polaroid--manta {
+      animation-delay: 0.15s;
+    }
+
+    .mascotas.caminando .huella {
+      animation: pisada 0.45s var(--ease-out) backwards;
+      animation-delay: calc(0.75s + var(--i) * 140ms);
+    }
+
+    .mascotas.caminando .huella::after {
+      animation: onda 0.7s var(--ease-out);
+      animation-delay: calc(0.75s + var(--i) * 140ms);
+    }
+
+    /* Al pasar el mouse por el collage, las huellas vuelven a pisar una por una */
+    @media (hover: hover) {
+      .collage:hover .huella svg {
+        animation: rebote 0.5s var(--ease-out);
+        animation-delay: calc(var(--i) * 60ms);
+      }
+      .polaroid {
+        transition: rotate 0.5s var(--ease-out), scale 0.5s var(--ease-out);
+      }
+      .collage:hover .polaroid {
+        rotate: calc(var(--rot) * 0.4);
+        scale: 1.02;
+      }
     }
   }
 
-
-  .mascotas.caminando .huella {
-    animation: pisada 0.5s var(--ease-out) both;
-    animation-delay: calc(var(--i) * 110ms);
-  }
-
-  .mascotas:not(.caminando) .huella {
-    opacity: 0;
+  @keyframes caer {
+    from {
+      opacity: 0;
+      rotate: calc(var(--rot) * -2.5);
+      translate: 0 -40px;
+      scale: 1.08;
+    }
   }
 
   @keyframes pisada {
     from {
       opacity: 0;
-      transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--l) * 60%)) scale(1.5);
+      transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--l) * 55%)) scale(1.7);
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .mascotas:not(.caminando) .huella {
-      opacity: 1;
+  @keyframes onda {
+    from {
+      opacity: 0.9;
+      scale: 0.3;
     }
-    .mascotas.caminando .huella {
-      animation: none;
+    to {
+      opacity: 0;
+      scale: 1.4;
+    }
+  }
+
+  @keyframes rebote {
+    40% {
+      scale: 1.3;
     }
   }
 
   .mascotas__texto {
-    position: relative;
     display: grid;
     justify-items: start;
     gap: 1.4rem;
@@ -127,15 +238,8 @@ const huellas = Array.from({ length: N }, (_, i) => {
 
   .mascotas__texto h2 {
     max-width: 11ch;
-    font-size: clamp(2.8rem, 6.4vw, 5.6rem);
+    font-size: clamp(2.8rem, 6.4vw, 5.2rem);
     color: var(--verde);
-  }
-
-  .mascotas__texto .lead,
-  .mascotas__reglas {
-    padding: 0.2rem 0;
-    background: var(--verde-papel);
-    box-shadow: 0 0 0 0.6rem var(--verde-papel);
   }
 
   .mascotas__reglas {
@@ -155,57 +259,17 @@ const huellas = Array.from({ length: N }, (_, i) => {
     padding-left: 1.2em;
   }
 
-  /* Fotos: la apaisada y la vertical a la misma altura */
-  .mascotas__fotos {
-    display: grid;
-    grid-template-columns: 1448fr 815fr;
-    gap: 0.75rem;
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .mascotas__fotos figure {
-    margin: 0;
-  }
-
-  .mascotas__fotos :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 14px;
-  }
-
-  .m-atardecer :global(img) {
-    aspect-ratio: 4 / 3;
-  }
-
-  .m-manta :global(img) {
-    object-position: 50% 60%;
-  }
-
-  /* Celular: las dos del mismo tamaño, así la vertical no queda finita */
-  @media (max-width: 699px) {
-    .mascotas__fotos {
-      grid-template-columns: 1fr 1fr;
-    }
-    .mascotas__fotos :global(img),
-    .m-atardecer :global(img) {
-      aspect-ratio: 3 / 4;
-    }
-  }
-
-  @media (min-width: 1000px) {
-    .mascotas__texto {
-      padding-left: 38%;
-    }
-    .mascotas__fotos {
-      gap: 1rem;
+  /* Celular y tablet: primero el texto, después las fotos */
+  @media (max-width: 999px) {
+    .collage {
+      order: 2;
     }
   }
 </style>
 
 <script>
   const s = document.querySelector<HTMLElement>('.mascotas')!;
+  const collage = s.querySelector<HTMLElement>('.collage')!;
   new IntersectionObserver(
     (entradas, obs) => {
       if (entradas.some((e) => e.isIntersecting)) {
@@ -213,6 +277,6 @@ const huellas = Array.from({ length: N }, (_, i) => {
         obs.disconnect();
       }
     },
-    { threshold: 0.35 },
-  ).observe(s);
+    { threshold: 0.4 },
+  ).observe(collage);
 </script>
